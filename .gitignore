@@ -1,2 +1,4 @@
 # SublimeText project files
 *.sublime-workspace
+# no node_modules
+node_modules/
