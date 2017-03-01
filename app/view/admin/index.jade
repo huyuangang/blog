@@ -41,10 +41,10 @@ html
 						tbody
 							tr(v-for='(a,index) in article')
 								td.text-left
-									a(:href='a.urls') {{a.title}}
-								td.text-center {{a.pushTime}}
-								td.text-center {{a.status}}
-								td.text-center {{a.browse}}
+									a(href='#') {{a.title}}
+								td.text-center {{getDate(a.createTime)}}
+								td.text-center {{a.status?'显示':'隐藏'}}
+								td.text-center {{a.pv}}
 								td.text-center {{a.review}}
 								td.text-center(:data-index='index')
 									i.icon-eye(title='查看')
@@ -81,7 +81,21 @@ html
 					h2
 						|推荐管理
 						button(@click='initReco') 添加推荐
-					table
+					table.table
+						thead
+							tr
+								th.text-left 名称
+								th.text-center 链接地址
+								th.text-center 推荐时间
+								th.text-center 操作
+						tbody
+							tr(v-for='r in recommend')
+								td.text-left {{r.name}}
+								td.text-center {{r.url}}
+								td.text-center {{getDate(r.createTime)}}
+								td.text-center
+									i.icon-pencil(title='编辑')
+									i.icon-bin(title='删除')
 				.section-inner#category
 					h2 
 						|类别管理
@@ -96,8 +110,8 @@ html
 						tbody
 							tr(v-for='(c,index) in categorys')
 								td.text-left {{c.name}}
-								td.text-center {{c.create}}
-								td.text-center {{c.articles}}
+								td.text-center {{getDate(c.createTime)}}
+								td.text-center {{c.articles.length}}
 								td.text-center(:data-index='index')
 									i.icon-pencil(title='编辑')
 									i.icon-bin(title='删除')

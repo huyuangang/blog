@@ -1,6 +1,7 @@
 var Info = require('../../db/model/info.js')
 var Article = require('../../db/model/article.js')
 var Category = require('../../db/model/category.js')
+var Recommend = require('../../db/model/recommend.js')
 
 
 module.exports = function(app){
@@ -128,6 +129,41 @@ module.exports = function(app){
 				res.json({
 					success:true,
 					data: '章节存储成功'
+				})
+			}
+		})
+	})
+
+
+	app.get('/admin/recommend',function(req,res){
+		Recommend.find({},function(err, cb){
+			if(err){
+				res.json({
+					err:true,
+					data: err
+				})
+			}
+			else{
+				res.json({
+					success: true,
+					data: cb
+				})
+			}
+
+		})
+	})
+	app.post('/admin/recommend/new',function(req, res){
+		var newReco = new Recommend(req.body);
+		newReco.save(function(err){
+			if(err){
+				res.json({
+					err: true,
+					data:err
+				})
+			}else{
+				res.json({
+					success:true,
+					data:'推荐存储成功'
 				})
 			}
 		})

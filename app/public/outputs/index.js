@@ -8644,6 +8644,40 @@ module.exports = {
 			};
 			xhr.send(sendData);
 		}
+	},
+	date: {
+		format: function format(dateStr, _format) {
+			var date = this.toDate(dateStr);
+			if (!(date instanceof Date)) return '格式化串错误';
+			var RegObj = {
+				"M+": date.getMonth() + 1,
+				"d+": date.getDate(),
+				"h+": date.getHours() % 12 == 0 ? 12 : date.getHours(),
+				"H+": date.getHours(),
+				"m+": date.getMinutes(),
+				"s+": date.getSeconds()
+			};
+			if (/(y+)/.test(_format)) {
+				_format = _format.replace(RegExp.$1, (date.getFullYear() + '').substr(4 - RegExp.$1.length));
+			}
+			for (var reg in RegObj) {
+				if (RegObj.hasOwnProperty(reg)) {
+					if (new RegExp('(' + reg + ')').test(_format)) {
+						_format = _format.replace(RegExp.$1, RegExp.$1.length == 1 ? RegObj[reg] : ('00' + RegObj[reg]).substr(('' + RegObj[reg]).length));
+					}
+				}
+			}
+			return _format;
+		},
+		toDate: function toDate(dateStr) {
+			if (typeof dateStr === 'string') {
+				return new Date(Date.parse(dateStr));
+			} else if (typeof dateStr === 'number') {
+				return new Date(dateStr);
+			} else {
+				return dateStr;
+			}
+		}
 	}
 };
 
@@ -8673,8 +8707,8 @@ new _vue2.default({
 		socialIcon: [{ icon: 'icon-github', urls: '#' }, { icon: 'icon-git', urls: '#' }, { icon: 'icon-qrcode', urls: '#' }, { icon: 'icon-headphones', urls: '#' }],
 		articles: [],
 		info: [{ value: '', icon: 'icon-location' }, { value: '', icon: 'icon-link' }],
-		cate: [{ name: '分类1', urls: '#', icon: '', total: 8 }, { name: '分类1', urls: '#', icon: '', total: 9 }, { name: '分类1', urls: '#', icon: '', total: 10 }],
-		reco: [{ name: 'Vue2.0', urls: 'http://cn.vuejs.org/v2/guide/', icon: 'icon-link' }, { name: 'Node.js6.9.4中文文档', urls: 'http://nodejs.cn/', icon: 'icon-link' }, { name: 'Webpack中文文档', urls: 'http://webpackdoc.com/', icon: 'icon-link' }]
+		cate: [],
+		reco: []
 	},
 	created: function created() {
 		var me = this;
@@ -8695,15 +8729,20 @@ new _vue2.default({
 			var data = JSON.parse(str);
 			if (data.success) {
 				me.articles = data.data;
-				console.log(me.articles);
 			}
 		}, e);
-		_common2.default.ajax.get('/categorys', {}, e, e);
+		_common2.default.ajax.get('/categorys', {}, function (str) {
+			var data = JSON.parse(str);
+			me.cate = data.data;
+		}, e);
+		_common2.default.ajax.get('/recommends', {}, function (str) {
+			var data = JSON.parse(str);
+			me.reco = data.data;
+		}, e);
 	},
 	methods: {
 		getDate: function getDate(date) {
-			var d = new Date(date);
-			return d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
+			return _common2.default.date.format(date, 'yyyy-MM-dd HH:mm:ss');
 		},
 		getCate: function getCate(cateArr) {
 			return cateArr.join(',');

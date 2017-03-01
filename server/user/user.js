@@ -1,13 +1,14 @@
 var Info = require('../../db/model/info.js');
 var Article = require('../../db/model/article.js')
 var Category = require('../../db/model/category.js')
+var Recommend = require('../../db/model/recommend.js')
 
 module.exports = function(app){
 	app.get('/index',function(req,res){
 		res.render('user/index');
 	});
 	app.get('',function(req, res){
-		res.redirect('/index');
+		res.render('user/index');
 	});
 	app.get('/user/info',function(req,res){
 		Info.find({},function(err,cb){
@@ -39,6 +40,23 @@ module.exports = function(app){
 	});
 	app.get('/categorys',function(req,res){
 		Category.find({},function(err, cb){
+			if(err){
+				res.json({
+					error:true,
+					data:err
+				})
+			}
+			else{
+				res.json({
+					success: true,
+					data: cb
+				})
+			}
+		})
+	})
+
+	app.get('/recommends',function(req,res){
+		Recommend.find({},function(err, cb){
 			if(err){
 				res.json({
 					error:true,

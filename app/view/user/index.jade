@@ -49,16 +49,15 @@ html
 							h2 分类
 							ul.category
 								li(v-for='c in cate')
-									a(:href='c.urls') 
-										i(:class='c.icon')
+									a(href='#') 
 										|{{c.name}}
-										span.badge {{c.total}}
+										span.badge {{c.articles.length}}
 						.section-inner
 							h2 推荐
 							ul.recommend
 								li(v-for='r in reco')
-									a(:href = 'r.urls',target='_blank')
-										i(:class='r.icon')
+									a(:href = 'r.url',target='_blank')
+										i(class='icon-link')
 										|{{r.name}}
 						.section-inner
 							h2.ddr 

@@ -26,6 +26,7 @@ new Vue({
 			content:'',
 			newCate:''
 		},
+		cates:[],
 		contentHtml:''
 	},
 	computed:{
@@ -34,6 +35,14 @@ new Vue({
 			me.article.content = marked(me.contentHtml);
 			return marked(me.contentHtml);
 		}
+	},
+	created:function(){
+		var me = this;
+		function cateSuccess(str){
+			var data = JSON.parse(str);
+			me.cates = data.data;
+		}
+		hl.ajax.get('/admin/category',{},cateSuccess,function(str){console.log(str)});
 	},
 	methods:{
 		sumbit:function(){

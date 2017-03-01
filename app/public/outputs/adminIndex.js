@@ -8642,6 +8642,40 @@ module.exports = {
 			};
 			xhr.send(sendData);
 		}
+	},
+	date: {
+		format: function format(dateStr, _format) {
+			var date = this.toDate(dateStr);
+			if (!(date instanceof Date)) return '格式化串错误';
+			var RegObj = {
+				"M+": date.getMonth() + 1,
+				"d+": date.getDate(),
+				"h+": date.getHours() % 12 == 0 ? 12 : date.getHours(),
+				"H+": date.getHours(),
+				"m+": date.getMinutes(),
+				"s+": date.getSeconds()
+			};
+			if (/(y+)/.test(_format)) {
+				_format = _format.replace(RegExp.$1, (date.getFullYear() + '').substr(4 - RegExp.$1.length));
+			}
+			for (var reg in RegObj) {
+				if (RegObj.hasOwnProperty(reg)) {
+					if (new RegExp('(' + reg + ')').test(_format)) {
+						_format = _format.replace(RegExp.$1, RegExp.$1.length == 1 ? RegObj[reg] : ('00' + RegObj[reg]).substr(('' + RegObj[reg]).length));
+					}
+				}
+			}
+			return _format;
+		},
+		toDate: function toDate(dateStr) {
+			if (typeof dateStr === 'string') {
+				return new Date(Date.parse(dateStr));
+			} else if (typeof dateStr === 'number') {
+				return new Date(dateStr);
+			} else {
+				return dateStr;
+			}
+		}
 	}
 };
 
@@ -8697,7 +8731,7 @@ __vue_options__ = __vue_exports__ = __vue_exports__.default
 if (typeof __vue_options__ === "function") {
   __vue_options__ = __vue_options__.options
 }
-__vue_options__.__file = "F:\\sublime\\HYGBLOG\\app\\components\\modal.vue"
+__vue_options__.__file = "F:\\sublime\\blog\\app\\components\\modal.vue"
 __vue_options__.render = __vue_template__.render
 __vue_options__.staticRenderFns = __vue_template__.staticRenderFns
 
@@ -8708,9 +8742,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-01894717", __vue_options__)
+    hotAPI.createRecord("data-v-f7a566ca", __vue_options__)
   } else {
-    hotAPI.reload("data-v-01894717", __vue_options__)
+    hotAPI.reload("data-v-f7a566ca", __vue_options__)
   }
 })()}
 if (__vue_options__.functional) {console.error("[vue-loader] modal.vue: functional components are not supported and should be defined in plain js files using render functions.")}
@@ -9026,8 +9060,8 @@ if(content.locals) module.exports = content.locals;
 if(false) {
 	// When the styles change, update the <style> tags
 	if(!content.locals) {
-		module.hot.accept("!!./../../node_modules/.0.25.0@css-loader/index.js!./../../node_modules/.10.0.0@vue-loader/lib/style-rewriter.js?id=data-v-01894717!./../../node_modules/.10.0.0@vue-loader/lib/selector.js?type=styles&index=0!./modal.vue", function() {
-			var newContent = require("!!./../../node_modules/.0.25.0@css-loader/index.js!./../../node_modules/.10.0.0@vue-loader/lib/style-rewriter.js?id=data-v-01894717!./../../node_modules/.10.0.0@vue-loader/lib/selector.js?type=styles&index=0!./modal.vue");
+		module.hot.accept("!!../../node_modules/.0.25.0@css-loader/index.js!../../node_modules/.10.0.0@vue-loader/lib/style-rewriter.js?id=data-v-f7a566ca!../../node_modules/.10.0.0@vue-loader/lib/selector.js?type=styles&index=0!./modal.vue", function() {
+			var newContent = require("!!../../node_modules/.0.25.0@css-loader/index.js!../../node_modules/.10.0.0@vue-loader/lib/style-rewriter.js?id=data-v-f7a566ca!../../node_modules/.10.0.0@vue-loader/lib/selector.js?type=styles&index=0!./modal.vue");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
@@ -9065,7 +9099,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-     require("vue-loader/node_modules/vue-hot-reload-api").rerender("data-v-01894717", module.exports)
+     require("vue-loader/node_modules/vue-hot-reload-api").rerender("data-v-f7a566ca", module.exports)
   }
 }
 
@@ -9142,47 +9176,40 @@ exports.default = {
             this.modalRect.t = this.top || parseInt(m_Style.marginTop);
         },
         down: function down(event) {
-            var _this = this;
-
             if (event.target.tagName === 'A') {
                 this.closeModal();
             } else {
-                var me;
+                var move = function move(event) {
+                    me.startPoint.x += event.clientX - me.start.x;
+                    me.startPoint.y += event.clientY - me.start.y;
+                    me.start.x = event.clientX;
+                    me.start.y = event.clientY;
+                    if (me.startPoint.x + me.modalRect.l <= 0) {
+                        me.startPoint.x = 0 - me.modalRect.l;
+                    }
+                    if (me.startPoint.x + me.modalRect.l + me.modalRect.w >= me.wndRect.w) {
+                        me.startPoint.x = me.wndRect.w - me.modalRect.l - me.modalRect.w;
+                    }
+                    if (me.startPoint.y + me.modalRect.t <= 0) {
+                        me.startPoint.y = 0 - me.modalRect.t;
+                    }
+                    if (me.startPoint.y + me.modalRect.t + me.modalRect.h >= me.wndRect.h) {
+                        me.startPoint.y = me.wndRect.h - me.modalRect.t - me.modalRect.h;
+                    }
+                    document.querySelector('.modal-dialog').style.transform = 'translate(' + me.startPoint.x + 'px,' + me.startPoint.y + 'px)';
+                };
 
-                (function () {
-                    var move = function move(event) {
-                        me.startPoint.x += event.clientX - me.start.x;
-                        me.startPoint.y += event.clientY - me.start.y;
-                        me.start.x = event.clientX;
-                        me.start.y = event.clientY;
-                        if (me.startPoint.x + me.modalRect.l <= 0) {
-                            me.startPoint.x = 0 - me.modalRect.l;
-                        }
-                        if (me.startPoint.x + me.modalRect.l + me.modalRect.w >= me.wndRect.w) {
-                            me.startPoint.x = me.wndRect.w - me.modalRect.l - me.modalRect.w;
-                        }
-                        if (me.startPoint.y + me.modalRect.t <= 0) {
-                            me.startPoint.y = 0 - me.modalRect.t;
-                        }
-                        if (me.startPoint.y + me.modalRect.t + me.modalRect.h >= me.wndRect.h) {
-                            me.startPoint.y = me.wndRect.h - me.modalRect.t - me.modalRect.h;
-                        }
-                        document.querySelector('.modal-dialog').style.transform = 'translate(' + me.startPoint.x + 'px,' + me.startPoint.y + 'px)';
-                    };
+                var up = function up() {
+                    document.removeEventListener('mousemove', move);
+                    document.removeEventListener('mouseup', up);
+                };
 
-                    var up = function up() {
-                        document.removeEventListener('mousemove', move);
-                        document.removeEventListener('mouseup', up);
-                    };
-
-                    _this.calcModal();
-                    _this.start.x = event.clientX;
-                    _this.start.y = event.clientY;
-                    me = _this;
-
-                    document.addEventListener('mousemove', move);
-                    document.addEventListener('mouseup', up);
-                })();
+                this.calcModal();
+                this.start.x = event.clientX;
+                this.start.y = event.clientY;
+                var me = this;
+                document.addEventListener('mousemove', move);
+                document.addEventListener('mouseup', up);
             }
         }
     },
@@ -9231,10 +9258,11 @@ new _vue2.default({
 	components: { modal: _modal2.default },
 	data: {
 		topNav: [{ name: '首页管理', urls: '#info', child: [{ name: '首页管理1', urls: '#' }, { name: '首页管理2', urls: '#' }] }, { name: '文章管理', urls: '#article', child: [{ name: '文章管理1', urls: '#' }, { name: '文章管理2', urls: '#' }, { name: '文章管理3', urls: '#' }, { name: '文章管理4', urls: '#' }] }, { name: '杂记管理', urls: '#demo', child: [{ name: '杂记管理1', urls: '#' }, { name: '杂记管理2', urls: '#' }, { name: '杂记管理3', urls: '#' }] }],
-		article: [{ title: '文章标题', urls: '#', pushTime: '2017-1-15', status: '显示', browse: 10, review: 3 }, { title: '文章标题', urls: '#', pushTime: '2017-1-15', status: '显示', browse: 10, review: 3 }, { title: '文章标题', urls: '#', pushTime: '2017-1-15', status: '显示', browse: 10, review: 3 }],
-		demo: [{ title: '样例标题', urls: '#', pushTime: '2017-1-15', status: '显示', browse: 10, review: 3 }, { title: '样例标题', urls: '#', pushTime: '2017-1-15', status: '显示', browse: 10, review: 3 }, { title: '样例标题', urls: '#', pushTime: '2017-1-15', status: '显示', browse: 10, review: 3 }],
+		article: [],
+		demo: [],
+		categorys: [],
+		recommend: [],
 		infos: [{ info: 'name', name: '姓名', value: '', placeholder: '请输入名字' }, { info: 'description', name: '描述', value: '', placeholder: '请输入描述' }, { info: 'address', name: '现住址', value: '', placeholder: '请输入现住址' }, { info: 'email', name: '邮箱', value: '', placeholder: '请输入邮箱' }],
-		categorys: [{ name: '类别1', articles: 10, create: '2017-2-27' }, { name: '类别2', articles: 10, create: '2017-2-27' }, { name: '类别3', articles: 10, create: '2017-2-27' }],
 		config: {
 			title: '添加推荐',
 			headerColor: '#49ac43',
@@ -9250,8 +9278,27 @@ new _vue2.default({
 		}
 	},
 	created: function created() {
-		_common2.default.ajax.get('/admin/category', {}, function (str) {
+		var me = this;
+		function cateSuccess(str) {
+			var data = JSON.parse(str);
+			me.categorys = data.data;
+		}
+		_common2.default.ajax.get('/admin/category', {}, cateSuccess, function (str) {
 			console.log(str);
+		});
+		_common2.default.ajax.get('/articles', {}, function (str) {
+			var data = JSON.parse(str);
+			if (data.success) {
+				me.article = data.data;
+			}
+		}, function (str) {
+			console.log(str);
+		});
+		_common2.default.ajax.get('/admin/recommend', {}, function (str) {
+			var data = JSON.parse(str);
+			if (data.success) {
+				me.recommend = data.data;
+			}
 		}, function (str) {
 			console.log(str);
 		});
@@ -9275,7 +9322,11 @@ new _vue2.default({
 			var me = this;
 			me.showModal = false;
 			if (me.isReco) {
-				console.log(me.addRecoInfo);
+				_common2.default.ajax.post('/admin/recommend/new', me.addRecoInfo, function (str) {
+					console.log(str);
+				}, function (str) {
+					console.log(str);
+				});
 				me.addRecoInfo = {
 					name: '',
 					url: ''
@@ -9310,6 +9361,9 @@ new _vue2.default({
 			this.config.title = '添加分类';
 			this.showModal = true;
 			this.isCate = true;
+		},
+		getDate: function getDate(date) {
+			return _common2.default.date.format(date, 'yyyy-MM-dd HH:mm:ss');
 		}
 	}
 });

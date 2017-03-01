@@ -18,16 +18,8 @@ new Vue({
 			{value:'',icon:'icon-location'},
 			{value:'',icon:'icon-link'}
 		],
-		cate:[
-			{name:'分类1',urls:'#',icon:'',total:8},
-			{name:'分类1',urls:'#',icon:'',total:9},
-			{name:'分类1',urls:'#',icon:'',total:10},
-		],
-		reco:[
-			{name:'Vue2.0',urls:'http://cn.vuejs.org/v2/guide/',icon:'icon-link'},
-			{name:'Node.js6.9.4中文文档',urls:'http://nodejs.cn/',icon:'icon-link'},
-			{name:'Webpack中文文档',urls:'http://webpackdoc.com/',icon:'icon-link'}
-		]
+		cate:[],
+		reco:[]
 	},
 	created:function(){
 		var me = this;
@@ -48,15 +40,20 @@ new Vue({
 			var data = JSON.parse(str);
 			if(data.success){
 				me.articles = data.data;
-				console.log(me.articles);
 			}
 		},e);
-		hl.ajax.get('/categorys',{},e,e);
+		hl.ajax.get('/categorys',{},function(str){
+			var data = JSON.parse(str);
+			me.cate = data.data;
+		},e);
+		hl.ajax.get('/recommends',{},function(str){
+			var data = JSON.parse(str);
+			me.reco = data.data;
+		},e);
 	},
 	methods:{
 		getDate:function(date){
-			var d = new Date(date);
-			return d.getFullYear()+'-'+ (d.getMonth()+1) + '-'+d.getDate();
+			return hl.date.format(date,'yyyy-MM-dd HH:mm:ss');
 		},
 		getCate:function(cateArr){
 			return cateArr.join(',');

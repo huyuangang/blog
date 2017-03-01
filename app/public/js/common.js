@@ -82,10 +82,10 @@ module.exports = {
 		},
 		toDate:function(dateStr){
 			if(typeof dateStr === 'string'){
-				return new Date(parseInt(dataStr))
+				return new Date(Date.parse(dateStr));
 			}
 			else if(typeof dateStr === 'number'){
-				return new Date(dateStr)
+				return new Date(dateStr);
 			}
 			else{
 				return dateStr;

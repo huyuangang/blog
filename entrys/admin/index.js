@@ -11,26 +11,15 @@ new Vue({
 			{name:'文章管理',urls:'#article',child:[{name:'文章管理1',urls:'#'},{name:'文章管理2',urls:'#'},{name:'文章管理3',urls:'#'},{name:'文章管理4',urls:'#'}]},
 			{name:'杂记管理',urls:'#demo',child:[{name:'杂记管理1',urls:'#'},{name:'杂记管理2',urls:'#'},{name:'杂记管理3',urls:'#'}]}
 		],
-		article:[
-			{title:'文章标题', urls:'#', pushTime:'2017-1-15',status:'显示',browse:10,review:3},
-			{title:'文章标题', urls:'#', pushTime:'2017-1-15',status:'显示',browse:10,review:3},
-			{title:'文章标题', urls:'#', pushTime:'2017-1-15',status:'显示',browse:10,review:3}
-		],
-		demo:[
-			{title:'样例标题', urls:'#', pushTime:'2017-1-15',status:'显示',browse:10,review:3},
-			{title:'样例标题', urls:'#', pushTime:'2017-1-15',status:'显示',browse:10,review:3},
-			{title:'样例标题', urls:'#', pushTime:'2017-1-15',status:'显示',browse:10,review:3}
-		],
+		article:[],
+		demo:[],
+		categorys:[],
+		recommend:[],
 		infos:[
 			{info:'name',name:'姓名',value:'',placeholder:'请输入名字'},
 			{info:'description',name:'描述',value:'',placeholder:'请输入描述'},
 			{info:'address',name:'现住址',value:'',placeholder:'请输入现住址'},
 			{info:'email',name:'邮箱',value:'',placeholder:'请输入邮箱'},
-		],
-		categorys:[
-			{name:'类别1',articles:10,create:'2017-2-27'},
-			{name:'类别2',articles:10,create:'2017-2-27'},
-			{name:'类别3',articles:10,create:'2017-2-27'}
 		],
 		config:{
 			title:'添加推荐',
@@ -47,7 +36,24 @@ new Vue({
 		}
 	},
 	created:function(){
-		hl.ajax.get('/admin/category',{},function(str){console.log(str)},function(str){console.log(str)});
+		var me = this;
+		function cateSuccess(str){
+			var data = JSON.parse(str);
+			me.categorys = data.data;
+		}
+		hl.ajax.get('/admin/category',{},cateSuccess,function(str){console.log(str)});
+		hl.ajax.get('/articles',{},function(str){
+			var data = JSON.parse(str);
+			if(data.success){
+				me.article = data.data;
+			}
+		},function(str){console.log(str)});
+		hl.ajax.get('/admin/recommend',{},function(str){
+			var data = JSON.parse(str);
+			if(data.success){
+				me.recommend = data.data;
+			}
+		},function(str){console.log(str)});
 	},
 	methods:{
 		toNewArticle:function(){
@@ -60,7 +66,7 @@ new Vue({
 				sendInfo[item.info] = item.value;
 			});
 			function s(str){
-				console.log(str);
+				console.log(str);             
 			};
 			hl.ajax.post('/admin/user/info/update',sendInfo,s,s);
 		},
@@ -68,7 +74,7 @@ new Vue({
 			var me  = this;
 			me.showModal = false;
 			if(me.isReco){
-				console.log(me.addRecoInfo);
+				hl.ajax.post('/admin/recommend/new',me.addRecoInfo,function(str){console.log(str)},function(str){console.log(str)});
 				me.addRecoInfo = {
 					name:'',
 					url:''
@@ -100,6 +106,9 @@ new Vue({
 			this.config.title = '添加分类';
 			this.showModal = true;
 			this.isCate = true;
+		},
+		getDate:function(date){
+			return hl.date.format(date,'yyyy-MM-dd HH:mm:ss');
 		}
 	}
 })

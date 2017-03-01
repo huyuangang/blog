@@ -54,6 +54,9 @@
 .form-group .type{
 	margin-top: 10px;
 }
+.form-group .type div{
+	display: inline-block;
+}
 .form-group .type span{
 	margin-right: 10px;
 	font-size: 14px;

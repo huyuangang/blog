@@ -24,12 +24,9 @@ html
 						label 文章类别
 						input(type='text',v-model='article.newCate')
 						div.type
-							input(type='checkbox',name='type',value='类别1',v-model='article.category') 
-							span 类别1
-							input(type='checkbox',name='type',value='类别2',v-model='article.category')
-							span 类别2
-							input(type='checkbox',name='type',value='类别3',v-model='article.category') 
-							span 类别3
+							div(v-for='c in cates')
+								input(type='checkbox',name='type',:value='c.name',v-model='article.category') 
+								span {{c.name}}
 				h2.mt20 文章内容
 				div.editor
 					.article-edit
