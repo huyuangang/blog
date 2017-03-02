@@ -8612,9 +8612,9 @@ module.exports = {
 			var xhr = new XMLHttpRequest();
 			xhr.open("GET", url, true);
 			xhr.onreadystatechange = function () {
-				if (xhr.readyState == 4 && xhr.status == 200) {
+				if (xhr.readyState == 4) {
 					if (xhr.status == 200 && typeof success === 'function') success(xhr.responseText);else {
-						if (typeof err === 'function') err('服务器发生未知错误');
+						if (typeof err === 'function') err(xhr.responseText);
 					}
 				}
 			};
@@ -8636,13 +8636,25 @@ module.exports = {
 			xhr.open("POST", url, true);
 			xhr.setRequestHeader('Content-type', 'application/json');
 			xhr.onreadystatechange = function () {
-				if (xhr.readyState == 4 && xhr.status == 200) {
-					if (typeof success === 'function') success(xhr.responseText);
-				} else {
-					if (typeof err === 'function') err(xhr.responseText);
+				if (xhr.readyState == 4) {
+					if (typeof success === 'function' && xhr.status == 200) success(xhr.responseText);else {
+						if (typeof err === 'function') err(xhr.responseText);
+					}
 				}
 			};
 			xhr.send(sendData);
+		},
+		del: function del(url, success, err) {
+			var xhr = new XMLHttpRequest();
+			xhr.open("DELETE", url, true);
+			xhr.onreadystatechange = function () {
+				if (xhr.readyState == 4) {
+					if (typeof success === 'function' && xhr.status == 200) success(xhr.responseText);else {
+						if (typeof err === 'function') err(xhr.responseText);
+					}
+				}
+			};
+			xhr.send();
 		}
 	},
 	date: {
@@ -8741,6 +8753,7 @@ new _vue2.default({
 		}, e);
 	},
 	methods: {
+
 		getDate: function getDate(date) {
 			return _common2.default.date.format(date, 'yyyy-MM-dd HH:mm:ss');
 		},

@@ -50,7 +50,7 @@ html
 									i.icon-eye(title='查看')
 									i.icon-pencil(title='编辑')
 									i.icon-cog(title='切换状态')
-									i.icon-bin(title='删除')
+									i.icon-bin(title='删除',@click='deleteArticle(a._id)')
 				.section-inner#demo
 					h2 
 						|样例管理
@@ -95,7 +95,7 @@ html
 								td.text-center {{getDate(r.createTime)}}
 								td.text-center
 									i.icon-pencil(title='编辑')
-									i.icon-bin(title='删除')
+									i.icon-bin(title='删除',@click='deleteRcommend(r._id)')
 				.section-inner#category
 					h2 
 						|类别管理
@@ -114,7 +114,7 @@ html
 								td.text-center {{c.articles.length}}
 								td.text-center(:data-index='index')
 									i.icon-pencil(title='编辑')
-									i.icon-bin(title='删除')
+									i.icon-bin(title='删除',@click='deleteCategory(c._id)')
 			modal(v-show='showModal',:config='config',@close-modal='closeModal')
 				.modal-body(slot='modal-body',v-show='isReco')
 					label 名称:
