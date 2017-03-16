@@ -5,20 +5,24 @@ var Recommend = require('../../db/model/recommend.js')
 
 module.exports = function(app){
 	app.get('/index',function(req,res){
-		res.render('user/index');
+		res.render('user');
 	});
 	app.get('',function(req, res){
-		res.render('user/index');
+		res.render('user',{
+			name:'胡元港',
+			description:'什么都不懂的前端菜鸟',
+			address:'四川，绵阳，涪城区',
+			email:'1730790894@qq.com'
+		});
 	});
 	app.get('/user/info',function(req,res){
-		Info.find({},function(err,cb){
-			if(err){
-				console.log('信息获取错误');
-			}else{
-				res.json({
-					success:true,
-					cb: cb[0]
-				});
+		res.json({
+			success:true,
+			data:{
+				name:'胡元港',
+				description:'什么都不懂的前端菜鸟',
+				address:'四川，绵阳，涪城区',
+				email:'1730790894@qq.com'
 			}
 		})
 	});

@@ -17,11 +17,12 @@ module.exports = {
 			xhr.open("GET", url, true);
 			xhr.onreadystatechange = function () {
 				if (xhr.readyState == 4) {
-					if (xhr.status == 200 && typeof success === 'function')
-						success(xhr.responseText);
+					if (xhr.status == 200 && typeof success === 'function'){
+						success(JSON.parse(xhr.responseText));
+					}
 					else {
 						if (typeof err === 'function')
-							err(xhr.responseText);
+							err(JSON.parse(xhr.responseText));
 					}
 				}
 			}
@@ -29,26 +30,19 @@ module.exports = {
 		},
 		post: function (url, data, success, err) {
 			var sendData;
-			sendData = JSON.stringify(data);
-			// if(typeof data === 'string')
-			// 	sendData = data;
-			// else if(typeof data === 'object'){
-			// 	var arr=[];
-			// 	for(var name in data)
-			// 		arr.push(name+'='+data[name]);
-			// 	if(arr.length>0)
-			// 		sendData = arr.join('&');
-			// }			
+			sendData = JSON.stringify(data);		
 			var xhr = new XMLHttpRequest();
 			xhr.open("POST", url, true);
 			xhr.setRequestHeader('Content-type', 'application/json');
 			xhr.onreadystatechange = function () {
 				if (xhr.readyState == 4) {
-					if (typeof success === 'function' && xhr.status == 200)
-						success(xhr.responseText);
+					if (typeof success === 'function' && xhr.status == 200){
+						success(JSON.parse(xhr.responseText));
+					}
+						
 					else {
 						if (typeof err === 'function')
-							err(xhr.responseText);
+							err(JSON.parse(xhr.responseText));
 					}
 				}
 
