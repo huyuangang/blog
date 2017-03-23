@@ -26,5 +26,10 @@ module.exports = {
             name:'[name]',
             context: __dirname
         }),
+        new webpack.optimize.UglifyJsPlugin({
+          compress: {
+            warnings: false
+          }
+        })
     ],
 };

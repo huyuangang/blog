@@ -12,6 +12,14 @@ const router = new VueRouter({
                     resolve(require('@page-components/user/index.vue'));
                 }, 'index');
             }
+		},
+		{
+			path:'/article/details/:id',
+			component:resolve => {
+                require.ensure([], () => {
+                    resolve(require('@page-components/user/article.vue'));
+                }, 'article');
+            }
 		}
 	]
 })

@@ -55,10 +55,10 @@ module.exports = {
 			xhr.onreadystatechange = function () {
 				if (xhr.readyState == 4) {
 					if (typeof success === 'function' && xhr.status == 200)
-						success(xhr.responseText);
+						success(JSON.parse(xhr.responseText));
 					else {
 						if (typeof err === 'function')
-							err(xhr.responseText);
+							err(JSON.parse(xhr.responseText));
 					}
 				}
 			}

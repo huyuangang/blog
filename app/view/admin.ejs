@@ -7,6 +7,23 @@
 	<title>胡元港的博客|后台首页</title>
 </head>
 <body>
-	
+	<div id="container">
+		<div class="top">
+			<div class="top-sign">HYG's Blog</div>
+			<a class='to-new' href="/admin/article/new">新建文章</a>
+			<ul class="top-nav">
+				<li v-for='t in topNav'>
+					<router-link :to="t.urls">{{t.name}}</router-link>
+				</li>
+			</ul>
+			
+		</div>
+		<div class="section-wapper">
+			<router-view></router-view>
+		</div>
+	</div>
+	<script src='/outputs/dll.js'></script>
+	<script src='/outputs/common.js'></script>
+	<script src='/outputs/adminIndex.js'></script>
 </body>
 </html>
