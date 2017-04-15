@@ -13,23 +13,27 @@
                 </a>
             </div>
         </header>
+        <div class="test" v-format-date='{date:date,pattern:"yyyy-MM-dd"}'></div>
         <div class="section-wapper">
             <div class="row">
                 <div class="left-box">
                     <div class="section-inner">
                         <h2>文章</h2>
-                        <div class="article" v-for='a in articles'>
-                            <h3 class="article-title">
-                                <a :href='"/article/details/"+a._id'>{{a.title}}</a>  
-                            </h3>
-                            <p class="article-des">{{a.description}}</p> 
-                            <ul class="article-oper">
-                                <li>分类:{{a.category.join(',')}}</li>
-                                <li>发表时间:{{getDate(a.createTime)}}</li> 
-                                <li><a href="#">{{a.pv}}个浏览</a></li>
-								<li>{{a.review}}条评论</li>
-                            </ul>
-                        </div>	
+                        <transition-group name='test'>
+                            <div class="article" v-for='(a,index) in articles' :key='"article"+index'>
+                                <h3 class="article-title">
+                                    <router-link :to='"/article/details/"+a._id'>{{a.title||'无标题'}}</router-link>  
+                                </h3>
+                                <p class="article-des">{{a.description||'暂时没有任何描述...'}}</p> 
+                                <ul class="article-oper">
+                                    <li>分类:{{a.category.join(',')}}</li>
+                                    <li>发表时间:{{getDate(a.createTime)}}</li> 
+                                    <li><a href="#">{{a.pv}}个浏览</a></li>
+                                    <li>{{a.review}}条评论</li>
+                                </ul>
+                            </div>	
+                        </transition-group>
+                        
                     </div>
                 </div>
                 <div class="right-box">
@@ -78,10 +82,12 @@
                 email:'',
                 articles:[],
                 categories:[],
-                recommends:[]
+                recommends:[],
+                date:''
             }
         },
         created:function(){
+            this.date = new Date();
             hl.ajax.get('/user/info',{},
                 (json)=>{
                     this.name = json.data.name;
@@ -129,5 +135,13 @@
     @import '../../../styles/user/index.less';
     a{
         text-decoration:none;
+    }
+    .test-enter,.test-leave-active{
+        margin-top: 100px;
+        opacity: 0;
+    }
+    .test-enter-active,.test-leave-active{
+        transition: all .5s ease-in;
+        transition-delay:.1s;
     }
 </style>

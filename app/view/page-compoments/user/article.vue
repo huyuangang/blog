@@ -1,9 +1,11 @@
 <template>
     <div class='detail'>
-        <nav class='nav'><a href="/">主页</a>&nbsp;&gt;&nbsp;文章详情页</nav>
+        <nav class='nav'><router-link to="/">主页</router-link>&nbsp;&gt;&nbsp;文章详情页</nav>
+        <header class="header">
+            <h1>{{title||'无标题'}} <span>(&nbsp;{{getDate(createTime,'yyyy/MM/dd')}}&nbsp;)</span></h1>
+            <p>{{description||'暂时没有任何描述...'}}</p>
+        </header>
         <div class="section-wapper">
-            <h1>{{title}}</h1>
-            <p>{{description}}</p>
             <div class="content" v-html='content'></div>
         </div>
     </div>
@@ -16,7 +18,8 @@
             return{
                 title:'',
                 description:'',
-                content:''
+                content:'',
+                createTime:''
             }
         },
         created:function(){
@@ -27,35 +30,96 @@
                         var data = json.data;
                         this.title = data.title;
                         this.description = data.description;
-                        this.content = data.content;
+                        this.content = data.html;
+                        this.createTime = data.createTime;
                     }
                 }
             )
+        },
+        methods:{
+            getDate:function(date,formatStr){
+                return hl.date.format(date,formatStr);
+            }
         }
     }
 </script>
 
-<style lang="" scoped>
-    .detail{
-        border-top:10px solid #778492;
-        padding:10px  15% 60px;
-        background: #dae3e7;
-    }
-    .nav{
-        padding:0 10px 8px 0;
+<style lang="less">
+    .detail .nav{
+        padding:15px 10px 15px 50px;
         border-bottom:1px solid #aaa;
+        color:#fff;
+        background:#778492;
     }
-    .section-wapper{
-        width:100%;
-        background:#fff;
-        padding:20px;
-        margin-top:50px;
+    .detail .nav a{
+        color:#dae3e7;
     }
-    .section-wapper h1{
-        font-size:30px;
+    .detail .nav a:hover
+    {
+        color:#fff;
     }
-    .section-wapper p{
-        text-indent:20px;
-        color:#555;
+    .detail .header{
+        width: 768px;
+        margin: auto;
+        margin-top:40px;
+        margin-bottom:20px;
+        padding-bottom:10px;
+        border-bottom:2px solid #aaa;
     }
+    .detail .header h1{
+        font-size:2.6em;
+    }
+    .detail .header h1 span{
+        color:#666;
+    }
+    .detail .header p{
+        margin-top:10px;
+    }
+    .detail .section-wapper{
+        width: 768px;
+        margin:auto;
+    }
+    .detail .content{
+        h1,h2,h3,h4,h5,h6{
+            margin:1.5em 0;
+        }
+        h1{
+            font-size:2.4em;
+        }
+        h2{
+            font-size:2.15em;
+        }
+        h3{
+            font-size:1.7em;
+        }
+        h4{
+            font-size:1.25em;
+        }
+        h5{
+            font-size:1em;
+        }
+        h6{
+            font-size:.85em;
+        }
+        p, pre, blockquote {
+            margin: 0 0 1.1em;
+        }
+        blockquote{
+            text-align: start;
+            border: 0;
+            padding: 10px 20px;
+            border-radius: 5px;
+            background-color: rgba(128,128,128,0.2);
+            p:last-child{
+                margin-bottom: 0;
+            }
+        }
+        pre{
+            background-color: rgba(128,128,128,0.2);
+            border-left: 10px solid #aaa;
+            border-top-right-radius: 5px;
+            border-bottom-right-radius: 5px;
+            padding: 15px 20px;
+        }
+    } 
 </style>

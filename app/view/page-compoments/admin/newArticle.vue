@@ -25,31 +25,38 @@
         <h2>文章内容</h2>
 		<div class="editor">
             <div class="article-edit">
-                <textarea name="" id="" cols="30" rows="10" v-model='contentHtml'></textarea>
+                <textarea name="" id="" cols="30" rows="10" v-model='content'></textarea>
             </div>
 			<div class="article-show" v-html='markText'>
             </div>
         </div>
 					
         <button class="sumbit" @click='sumbit'>发表文章</button>
-        <button class="cancel">取消</button> 
-    
+        <button class="cancel">取消</button>
     </div>
 </template>
 
 
 <script>
     var marked = require('marked');
+    var hls = require('highlight.js');
+    hls.configure({
+        tabReplace:'    '
+    })
+    var renderer = new marked.Renderer();
     marked.setOptions({
-        renderer: new marked.Renderer(),
+        renderer: renderer,
         gfm: true,
         tables: true,
-        breaks: false,
+        breaks: true,
         pedantic: false,
         sanitize: true,
         smartLists: true,
-        smartypants: false
-    });
+        smartypants: false,
+        highlight:function(code){
+            return hls.highlightAuto(code).value;
+        }
+    })
     export default{
         data:function(){
             return{
@@ -57,7 +64,7 @@
                 description:'',
                 newCate:'',
                 cates:[],
-                contentHtml:'',
+                content:'',
                 categories:[]
             }
         },
@@ -68,7 +75,7 @@
         },
         computed:{
             markText:function(){
-                return marked(this.contentHtml);
+                return marked(this.content);
             }
         },
         created:function(){
@@ -77,21 +84,37 @@
                 me.categories = json.data;
             }
             hl.ajax.get('/admin/category/data',{},cateSuccess,(str)=>{console.log(str)});
+            // var id = this.$route.params.id;
+            // if(!id)
+            //     return;
+            // hl.ajax.get('/admin/article/'+id,{},
+            //     (json)=>{
+            //         if(json.success){
+            //             var data = json.data;
+            //             this.title = data.title;
+            //             this.description = data.description;
+            //             this.cates = data.category;
+            //             this.content = data.text;
+            //         }
+            //     }
+            // )
+
         },
         methods:{
             sumbit:function(){
+                var id = this.$route.params.id;
                 var me = this;
                 function s(str){
                     console.log(str);
                 }
                 if(me.newCate !== '')
                     me.cates.push(me.newCate);
-                console.log(me.cates);
                 hl.ajax.post('/admin/article/new',{
                     title:me.title,
                     description:me.description,
                     category:me.cates,
-                    content:me.markText,
+                    text:me.content,
+                    html:me.markText,
                     newCate:me.newCate
                 },s,s)
             }
@@ -101,6 +124,11 @@
 
 
 <style lang="" scoped>
+    .new-article{
+        width:1140px;
+        margin:auto;
+        padding-bottom:30px;
+    }
     .form-group{
         margin-top: 20px;
     }

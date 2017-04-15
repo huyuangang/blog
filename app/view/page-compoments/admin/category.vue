@@ -1,27 +1,29 @@
 <template>
     <div class='category'>
-        <table cellspacing='0' class="category-table table">
-            <thead>
-                <tr>
-                    <th>名称</th>
-                    <th>新建时间</th>
-                    <th>文章数量</th>
-                    <th>操作</th>
-                </tr>
-            </thead>		
-			<tbody>
-                <tr v-for='c in categories'>
-                    <td>{{c.name}}</td>
-                    <td>{{getDate(c.createTime)}}</td>
-                    <td>{{c.articles.length}}</td>
-                    <td>
-                        <i class="icon-pencil" title='编辑'></i>
-                        <i class="icon-bin" title='删除' @click='deleteCategory(c._id)'></i>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-						
+		<el-row>
+            <el-col>
+                <el-table :data='categories' highlight-current-row>
+                    <el-table-column type="index" width="50" align="center"></el-table-column>
+                    <el-table-column property="name" label="名称" align="center" width="400"></el-table-column>
+                    <el-table-column  label="日期" width="300" align="center">
+                        <template scope="scope">
+                            {{getDate(scope.row.createTime)}}
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="文章数量" align="center" width="150">
+                        <template scope="scope">
+                            {{scope.row.articles.length}}
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="操作" align="center">
+                        <template scope="scope">
+                            <i class="icon-pencil" title='编辑'></i>
+                            <i class="icon-bin" title='删除' @click='deleteCategory(scope.row._id)'></i>
+                        </template>
+                    </el-table-column>
+                </el-table>
+            </el-col>
+        </el-row>			
     </div>
 </template>
 
@@ -69,29 +71,12 @@
 <style lang="less" scoped>
     .category{
         margin-top:80px;
-        .category-table{
-            width:100%;
-            thead{
-                th{
-                    border-bottom:5px solid;
-                    padding:0 0 10px 0;
-                }
-                
-            };
-            tbody{
-                td{
-                    text-align:center;
-                    line-height:50px;
-                    border-bottom:1px solid #fff;
-                    i{
-                        cursor:pointer;
-                        margin: 0 4px;
-                    };
-                    i:hover{
-                        color:#49ac43;
-                    }
-                }
-            }
+        i{
+            cursor:pointer;
+            margin: 0 4px;
+        };
+        i:hover{
+            color:#49ac43;
         }
     }
 </style>

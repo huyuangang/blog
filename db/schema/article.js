@@ -5,7 +5,8 @@ var articleSchema = new mongoose.Schema({
 	title: String,         //标题
 	description: String,   //描述
 	category: [],          //类别
-	content:'',
+	text:'',
+	html:'',
 	createTime: {          //创建时间
 		type:Date,
 		default:Date.now

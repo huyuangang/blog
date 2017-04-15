@@ -63,6 +63,23 @@ module.exports = {
 				}
 			}
 			xhr.send();
+		},
+		put: function(url,data,success,err){
+			var sendData;
+			sendData = JSON.stringify(data);
+			var xhr = new XMLHttpRequest();
+			xhr.open("PUT", url, true);
+			xhr.onreadystatechange = function () {
+				if (xhr.readyState == 4) {
+					if (typeof success === 'function' && xhr.status == 200)
+						success(JSON.parse(xhr.responseText));
+					else {
+						if (typeof err === 'function')
+							err(JSON.parse(xhr.responseText));
+					}
+				}
+			}
+			xhr.send(sendData);
 		}
 	},
 	date: {

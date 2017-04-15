@@ -66,7 +66,7 @@ module.exports = function (app) {
 
 	//获取文章
 
-	app.get('/admin/article/data', (req, res) => {
+	app.get('/admin/article/all', (req, res) => {
 		Article.find({}, function (err, cb) {
 			if (err) {
 				res.json({
@@ -81,12 +81,32 @@ module.exports = function (app) {
 			}
 		})
 	})
-
+	app.get('/admin/article/:id', (req, res) => {
+		Article.findOne({ _id: req.params.id }, (err, cb) => {
+			if (err) {
+				res.json({
+					error: true,
+					data: err
+				})
+			} else {
+				res.json({
+					success: true,
+					data: cb
+				})
+			}
+		})
+	})
 
 	//发布文章接口
 	app.post('/admin/article/new', function (req, res) {
 		var data = req.body;
-		var article = new Article({ title: data.title, description: data.description, category: data.category, content: data.content });
+		var article = new Article({
+			title: data.title,
+			description: data.description,
+			category: data.category,
+			html: data.html,
+			text: data.text
+		});
 		article.save(function (err) {
 			if (err)
 				console.log('文章存储错误');
@@ -134,6 +154,28 @@ module.exports = function (app) {
 			}
 		})
 	});
+	//修改文章状态
+	app.put('/admin/article/status/:id', function (req, res) {
+		Article.findOne({ _id: req.params.id }, function (err, cb) {
+			if (err) {
+				console.log(err);
+			}
+			else {
+				cb.status = !cb.status;
+				cb.save(function (err) {
+					if (err) {
+						console.log(err);
+					}
+					else {
+						res.json({
+							success: true,
+							resultDesc: '状态切换成功！'
+						})
+					}
+				})
+			}
+		})
+	})
 	//删除文章
 	app.delete('/admin/article/:id', function (req, res) {
 		Article.findOne({ _id: req.params.id }, function (err, cb) {

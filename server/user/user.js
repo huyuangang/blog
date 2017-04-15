@@ -11,9 +11,6 @@ module.exports = function (app) {
 		res.render('user');
 	});
 	app.get('/article/details/:id', function (req, res) {
-		if (req.session.user === undefined)
-			res.redirect('/admin/login');
-		else
 			res.render('user');
 	});
 
@@ -29,7 +26,7 @@ module.exports = function (app) {
 		})
 	});
 	app.get('/articles', function (req, res) {
-		Article.find({}, function (err, cb) {
+		Article.find({status:true}, function (err, cb) {
 			if (err) {
 				res.json({
 					error: true,
@@ -53,10 +50,19 @@ module.exports = function (app) {
 				})
 			}
 			else{
-				res.json({
-					success:true,
-					data:cb
-				});
+				cb.pv++;
+				cb.save((err)=>{
+					if(err){
+						console.log(err);
+					}
+					else{
+						res.json({
+							success:true,
+							data:cb
+						});
+					}
+				})
+				
 			}
 		})
 	})

@@ -1,33 +1,33 @@
 <template>
     <div class='article'>
-        <table cellspacing='0' class="article-table table">
-            <thead>
-                <tr>
-                    <th class="text-left">标题</th>
-                    <th>发表时间</th>
-                    <th>状态</th>
-                    <th>阅读</th>
-                    <th>评论</th>
-                    <th>操作</th>
-                </tr>
-            </thead>		
-			<tbody>
-                <tr v-for='a in articles'>
-                    <td>{{a.title}}</td>
-                    <td>{{getDate(a.createTime)}}</td>
-                    <td>{{a.status?"显示":"隐藏"}}</td>
-                    <td>{{a.pv}}</td>
-                    <td>{{a.review}}</td>
-                    <td>
-                        <i class="icon-eye" title='查看'></i>
-                        <i class="icon-pencil" title='编辑'></i>
-                        <i class="icon-cog" title='切换状态'></i>
-                        <i class="icon-bin" title='删除' @click='deleteArticle(a._id)'></i>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-						
+		<el-row>
+            <el-col>
+                <el-table :data='articles' highlight-current-row>
+                    <el-table-column type="index"  align="center" ></el-table-column>
+                    <el-table-column property="title" label="标题" align="center" width = '300'></el-table-column>
+                    <el-table-column  label="日期"  align="center" width = '300'>
+                        <template scope="scope">
+                            {{getDate(scope.row.createTime)}}
+                        </template>
+                    </el-table-column>
+                    <el-table-column property="status" label="状态" width='90' align="center" >
+                        <template scope="scope">
+                            {{scope.row.status?"显示":"隐藏"}}
+                        </template>
+                    </el-table-column>
+                    <el-table-column property="pv" label="阅读" align="center" width='70'></el-table-column>
+                    <el-table-column property="review" label="评论"  align="center" width='70'></el-table-column>
+                    <el-table-column label="操作" align="center">
+                        <template scope="scope">
+                            <a :href='"/article/details/"+scope.row._id'><i class="icon-eye" title='查看'></i></a>
+                            <a :href='"/admin/article/edit/"+scope.row._id'><i class="icon-pencil" title='编辑'></i></a>
+                            <a @click='changeStatus(scope.row._id)'><i class="icon-cog" title='切换状态'></i></a>
+                            <a @click='deleteArticle(scope.row._id)'><i class="icon-bin" title='删除' ></i></a>
+                        </template>
+                    </el-table-column>
+                </el-table>
+            </el-col>
+        </el-row>				
     </div>
 </template>
 
@@ -57,7 +57,7 @@
                 )
             },
             getArticle:function(){
-                hl.ajax.get('/admin/article/data',{},
+                hl.ajax.get('/admin/article/all',{},
                 (json)=>{
                     if(json.success)
                         this.articles = json.data;
@@ -65,6 +65,17 @@
                 (str)=>{
                     console.log(str);
                 })
+            },
+            changeStatus:function(id){
+                hl.ajax.put('/admin/article/status/'+id,{},
+                    (json)=>{
+                        console.log(json);
+                        this.getArticle();
+                    },
+                    (str)=>{
+                        console.log(str);
+                    }
+                )
             }
         }
     }
@@ -72,31 +83,15 @@
 
 
 <style lang="less" scoped>
-    .article{
-        margin-top:80px;
-        .article-table{
-            width:100%;
-            thead{
-                th{
-                    border-bottom:5px solid;
-                    padding:0 0 10px 0;
-                }
-                
-            };
-            tbody{
-                td{
-                    text-align:center;
-                    line-height:50px;
-                    border-bottom:1px solid #fff;
-                    i{
-                        cursor:pointer;
-                        margin: 0 4px;
-                    };
-                    i:hover{
-                        color:#49ac43;
-                    }
-                }
-            }
-        };
-    }
+.article{
+    margin-top:50px;
+}
+a{
+    cursor:pointer;
+    margin: 0 4px;
+    color:#434343;
+}
+a:hover{
+    color:#49ac43;
+}
 </style>

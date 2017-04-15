@@ -1,27 +1,24 @@
 <template>
     <div class='recommend'>
-        <table cellspacing='0' class="recommend-table table">
-            <thead>
-                <tr>
-                    <th>名称</th>
-                    <th>链接地址</th>
-                    <th>操作</th>
-                </tr>
-            </thead>		
-			<tbody>
-                <tr v-for='r in recommends'>
-                    <td>{{r.name}}</td>
-                    <td>
-                        <a target='_blank' :href="r.url">{{r.url}}</a>
-                    </td>
-                    <td>
-                        <i title='编辑' class="icon-pencil"></i>
-                        <i title='删除' @click='deleteRcommend(r._id)' class="icon-bin"></i>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-						
+		<el-row>
+            <el-col>
+                <el-table :data='recommends' highlight-current-row>
+                    <el-table-column type="index"  align="center" ></el-table-column>
+                    <el-table-column property="name" label="名称" align="center" width = '350'></el-table-column>
+                    <el-table-column  label="链接地址"  align="center" width = '500'>
+                        <template scope="scope">
+                            <a target='_blank' :href="scope.row.url">{{scope.row.url}}</a>
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="操作" align="center" >
+                        <template scope="scope">
+                            <i title='编辑' class="icon-pencil"></i>
+                            <i title='删除' @click='deleteRcommend(scope.row._id)' class="icon-bin"></i>
+                        </template>
+                    </el-table-column>
+                </el-table>
+            </el-col>
+        </el-row>		
     </div>
 </template>
 
@@ -53,31 +50,11 @@
 
 
 <style lang="less" scoped>
-    .recommend{
-        margin-top:80px;
-        .recommend-table{
-            width:100%;
-            thead{
-                th{
-                    border-bottom:5px solid;
-                    padding:0 0 10px 0;
-                }
-                
-            };
-            tbody{
-                td{
-                    text-align:center;
-                    line-height:50px;
-                    border-bottom:1px solid #fff;
-                    i{
-                        cursor:pointer;
-                        margin: 0 4px;
-                    };
-                    i:hover{
-                        color:#49ac43;
-                    }
-                }
-            }
-        }
-    }
+i{
+    cursor:pointer;
+    margin: 0 4px;
+};
+i:hover{
+    color:#49ac43;
+}
 </style>
