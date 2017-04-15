@@ -163,6 +163,7 @@
     .editor{
         margin-top: 30px;
         overflow:hidden;
+        border: 1px solid #ddd;
     }
     .editor h2{
         margin-bottom: 10px;

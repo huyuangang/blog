@@ -13,7 +13,6 @@
                 </a>
             </div>
         </header>
-        <div class="test" v-format-date='{date:date,pattern:"yyyy-MM-dd"}'></div>
         <div class="section-wapper">
             <div class="row">
                 <div class="left-box">
