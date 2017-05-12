@@ -10,6 +10,11 @@ module.exports = function (app) {
 	app.get('', function (req, res) {
 		res.render('user');
 	});
+
+	app.get('/test', function (req, res) {
+		res.render('user');
+	})
+
 	app.get('/article/details/:id', function (req, res) {
 			res.render('user');
 	});
@@ -19,7 +24,7 @@ module.exports = function (app) {
 			code: 1,
 			data: {
 				name: '胡元港',
-				description: '什么都不懂的前端菜鸟',
+				description: '书籍是人类进步的阶梯',
 				address: '四川，绵阳，涪城区',
 				email: '1730790894@qq.com'
 			}

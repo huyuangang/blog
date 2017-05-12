@@ -78,7 +78,7 @@
                 return marked(this.content);
             }
         },
-        created:function(){
+        activated:function(){
             var me = this;
             function cateSuccess(json){
                 me.categories = json.data;
@@ -100,7 +100,7 @@
             // )
 
         },
-        methods:{
+        methods: {
             sumbit:function(){
                 var id = this.$route.params.id;
                 var me = this;

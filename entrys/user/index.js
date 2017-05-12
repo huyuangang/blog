@@ -14,15 +14,16 @@ const router = new VueRouter({
             }
 		},
 		{
-			path:'/article/details/:id',
-			component:resolve => {
-                require.ensure([], () => {
-                    resolve(require('@page-components/user/article.vue'));
-                }, 'article');
-            }
+			path: '/article/details/:id',
+			component: resolve => {
+				require.ensure([], () => {
+					resolve(require('@page-components/user/article.vue'));
+				}, 'article');
+			}
 		}
 	]
 })
+
 
 new Vue({
 	el:'#app',

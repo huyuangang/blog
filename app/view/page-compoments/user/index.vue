@@ -32,7 +32,6 @@
                                 </ul>
                             </div>	
                         </transition-group>
-                        
                     </div>
                 </div>
                 <div class="right-box">
@@ -60,9 +59,7 @@
                                     <i class='icon-link'></i>
 								    {{r.name}}
                                 </a>
-										
                             </li>
-									
                         </ul>
                     </div>
                 </div>
@@ -85,8 +82,8 @@
                 date:''
             }
         },
-        created:function(){
-            this.date = new Date();
+        activated:function(){
+            this.date = new Date(2017,3,15);
             hl.ajax.get('/user/info',{},
                 (json)=>{
                     this.name = json.data.name;

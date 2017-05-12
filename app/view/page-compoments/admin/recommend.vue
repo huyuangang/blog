@@ -29,7 +29,7 @@
                 recommends:[]
             }
         },
-        created:function(){
+        activated:function(){
             hl.ajax.get('/admin/recommend/data',{},
                 (json)=>{
                     if(json.success)

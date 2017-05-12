@@ -27,7 +27,8 @@
                     </el-table-column>
                 </el-table>
             </el-col>
-        </el-row>				
+        </el-row>	
+        <router-view></router-view>			
     </div>
 </template>
 
@@ -38,7 +39,7 @@
                 articles:[]
             }
         },
-        created:function(){
+        activated:function(){
             this.getArticle();
         },
         methods:{
