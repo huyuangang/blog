@@ -1,13 +1,15 @@
 <template>
     <div>
         <div class="top">
-			<div class="top-sign"><a href="/">HYG's Blog</a></div>
-			<router-link class='to-new' to="/admin/article/new">新建文章</router-link>
-			<ul class="top-nav">
-				<li v-for='t in topNav'>
-					<router-link :to="t.urls">{{t.name}}</router-link>
-				</li>
-			</ul>
+			
+			<nav class="nav">
+                <a class='home' href="/">首页</a>
+                <ul>
+                    <li v-for='t in topNav'>
+					    <router-link  :to="t.urls">{{t.name}}</router-link>
+                    </li>
+                </ul>
+			</nav>
 			
 		</div>
 		<div class="section-wapper">
@@ -16,7 +18,6 @@
                     <router-view></router-view>
                 </keep-alive>
             </transition>
-            
 		</div>
     </div>
 </template>
@@ -30,7 +31,8 @@
                     { name: '分类管理', urls: '/admin/category', },
                     { name: '推荐管理', urls: '/admin/recommend' },
                     { name: '样例管理', urls: '/admin/demo' },
-                    { name: '杂记管理', urls: '#' }
+                    { name: '杂记管理', urls: '#' },
+                    { name: '新建文章', urls: '/admin/article/new'}
                 ]
             }
         }
@@ -38,7 +40,32 @@
 </script>
 
 
-<style lang="" scoped>
+<style lang="less" scoped>
+    .top{
+        margin-top: 50px;
+        .home{
+            font-size: 30px;
+        }
+        .nav{
+            width: 1140px;
+            margin:auto;
+            border-bottom: 1px solid #e7e7e7;
+            padding-bottom: 25px;
+            ul{
+                float:right;
+                li{
+                    display: inline;
+                    font-size: 20px;
+                    margin: 0 10px;
+                }
+            }
+        }
+    }
+    .section-wapper {
+        width: 1140px;
+        margin: auto;
+        margin-top: 50px;
+    }
     .view-enter{
         transform:translate(0,200px);
         opacity: 0;

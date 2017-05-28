@@ -38,6 +38,7 @@
 
 
 <script>
+    import hl from '@public/js/common.js'
     var marked = require('marked');
     var hls = require('highlight.js');
     hls.configure({

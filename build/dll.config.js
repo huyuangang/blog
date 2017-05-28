@@ -3,10 +3,12 @@ const path = require('path')
 const dlls = [
     'vue',
     'vue-router',
+    'vuex',
     'babel-polyfill'
 ]
 
 module.exports = {
+    devtool: '#source-map',
     output: {
         path: path.resolve(__dirname,'../app/public/outputs'),
         filename: '[name].js',

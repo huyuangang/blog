@@ -1,82 +1,72 @@
 <template>
     <div class='article'>
-		<el-row>
-            <el-col>
-                <el-table :data='articles' highlight-current-row>
-                    <el-table-column type="index"  align="center" ></el-table-column>
-                    <el-table-column property="title" label="标题" align="center" width = '300'></el-table-column>
-                    <el-table-column  label="日期"  align="center" width = '300'>
-                        <template scope="scope">
-                            {{getDate(scope.row.createTime)}}
-                        </template>
-                    </el-table-column>
-                    <el-table-column property="status" label="状态" width='90' align="center" >
-                        <template scope="scope">
-                            {{scope.row.status?"显示":"隐藏"}}
-                        </template>
-                    </el-table-column>
-                    <el-table-column property="pv" label="阅读" align="center" width='70'></el-table-column>
-                    <el-table-column property="review" label="评论"  align="center" width='70'></el-table-column>
-                    <el-table-column label="操作" align="center">
-                        <template scope="scope">
-                            <a :href='"/article/details/"+scope.row._id'><i class="icon-eye" title='查看'></i></a>
-                            <a :href='"/admin/article/edit/"+scope.row._id'><i class="icon-pencil" title='编辑'></i></a>
-                            <a @click='changeStatus(scope.row._id)'><i class="icon-cog" title='切换状态'></i></a>
-                            <a @click='deleteArticle(scope.row._id)'><i class="icon-bin" title='删除' ></i></a>
-                        </template>
-                    </el-table-column>
-                </el-table>
-            </el-col>
-        </el-row>	
-        <router-view></router-view>			
+        <div class="list-header">
+            <span class='no'>#</span>
+            <span class='title'>标题</span>
+            <span class='time'>发表日期</span>
+            <span class='status'>状态</span>
+            <span class='pv'>阅读量</span>
+            <span class='review'>评论量</span>
+            <span class='op'>操作</span>
+        </div>
+        <div class='list-item' v-for='(a,index) in articles'>
+            <span class='no'>{{index}}</span>
+            <span class='title'>{{a.title}}</span>
+            <span class='time'><format-date :date='a.createTime' format='yyyy-MM-dd hh:mm:ss'></format-date></span>
+            <span class='status'>{{a.status?"显示":"隐藏"}}</span>
+            <span class='pv'>{{a.pv}}</span>
+            <span class='review'>{{a.review}}</span>
+            <span class='op'>
+                <a :href='"/article/details/"+a._id'><i class="icon-eye" title='查看'></i></a>
+                <a :href='"/admin/article/edit/"+a._id'><i class="icon-pencil" title='编辑'></i></a>
+                <a @click='changeStatus(a._id)'><i class="icon-cog" title='切换状态'></i></a>
+                <a @click='deleteArticle(a._id)'><i class="icon-bin" title='删除' ></i></a>
+            </span>
+        </div>
     </div>
 </template>
 
 <script>
+    import formatDate from '@components/format-date.vue';
+    import axios from 'axios';
     export default{
         data:function(){
             return {
                 articles:[]
             }
         },
+        components:{formatDate},
         activated:function(){
             this.getArticle();
         },
         methods:{
-            getDate:function(date){
-                return hl.date.format(date,'yyyy-MM-dd hh:mm:ss');
-            },
             deleteArticle:function(id){
-                hl.ajax.del('/admin/article/'+id,
-                    (json)=>{
-                        console.log(json);
+                axios.del('/admin/article/'+id)
+                    .then((res)=>{
                         this.getArticle();
-                    },
-                    (str)=>{
-                        console.log(str);
-                    }
-                )
+                    })
+                    .catch((e)=>{
+                        console.log(e);
+                    });
             },
             getArticle:function(){
-                hl.ajax.get('/admin/article/all',{},
-                (json)=>{
-                    if(json.success)
-                        this.articles = json.data;
-                },
-                (str)=>{
-                    console.log(str);
+                axios.get('/admin/article/all')
+                    .then((res)=>{
+                    if(res.data.success)
+                        this.articles = res.data.data;
                 })
+                .catch((e)=>{
+                    console.log(e);
+                });
             },
             changeStatus:function(id){
-                hl.ajax.put('/admin/article/status/'+id,{},
-                    (json)=>{
-                        console.log(json);
+                axios.put('/admin/article/status/'+id)
+                    .then((res)=>{
                         this.getArticle();
-                    },
-                    (str)=>{
-                        console.log(str);
-                    }
-                )
+                    })
+                    .catch((e)=>{
+                        console.log(e);
+                    });
             }
         }
     }
@@ -86,6 +76,37 @@
 <style lang="less" scoped>
 .article{
     margin-top:50px;
+    .list-header,.list-item{
+        padding-bottom: 20px;
+        border-bottom: 1px solid #e7e7e7;
+        font-weight: bold;
+        span{
+            display:inline-block;
+        }
+        .no{
+            width:50px;
+            text-align: center;
+        }
+        .title{
+            width: 300px;
+        }
+        .time{
+            width: 270px;
+        }
+        .status{
+            width: 100px;
+            text-align:center;
+        }
+        .pv,.review{
+            width:90px;
+            text-align:center;
+        }
+    }
+    .list-item{
+        font-weight: normal;
+        padding: 20px 0;
+        border-bottom: none;
+    }
 }
 a{
     cursor:pointer;

@@ -11,16 +11,51 @@ const router = new VueRouter({
                 require.ensure([], () => {
                     resolve(require('@page-components/user/index.vue'));
                 }, 'index');
-            }
-		},
-		{
-			path: '/article/details/:id',
-			component: resolve => {
-				require.ensure([], () => {
-					resolve(require('@page-components/user/article.vue'));
-				}, 'article');
-			}
+			},
+			children: [
+				{
+					path: '',
+					component:resolve => {
+						require.ensure([], () => {
+							resolve(require('@page-components/user/home.vue'));
+						}, 'home');
+					}
+				},
+				{
+					path: 'notes',
+					component:resolve => {
+						require.ensure([], () => {
+							resolve(require('@page-components/user/notes.vue'));
+						}, 'notes');
+					}
+				},
+				{
+					path: '/note/:id',
+					component: resolve => {
+						require.ensure([], () => {
+							resolve(require('@page-components/user/note.vue'));
+						}, 'note');
+					}
+				},
+				{
+					path: '/recommends',
+					component: resolve => {
+						require.ensure([], () => {
+							resolve(require('@page-components/user/recommend.vue'));
+						}, 'recommends');
+					}
+				},
+				{
+					path: '/other',
+					component: resolve => {
+						require.ensure([], () => {
+							resolve(require('@page-components/user/other.vue'));
+						}, 'other');
+					}
+				}
+			]
 		}
+		
 	]
 })
 

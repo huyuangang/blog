@@ -1,25 +1,15 @@
 @import 'color.less';
 
 body{
-    font-size: 14px;
+    font-size: 16px;
     color: @main-font;
     height: 100%;
 }
-body::-webkit-scrollbar{
-    width: 6px;
-    height: 6px;
-    border:1px solid #aaa;
-    border-radius: 2px;
-}
-body::-webkit-scrollbar-thumb{
-    background: @main-green;
-    border-radius: 2px;
-}
+
 *{
     margin: 0;
     padding:0;
     font-family: 'Monaco','Lato', arial, sans-serif;
-	font-size: 16px;
 }
 
 ul{
@@ -29,6 +19,7 @@ ul{
 a{
     cursor: pointer;
     text-decoration:none;
+    color: #333;
 }
 
 .get-border-raduis(@r:3){

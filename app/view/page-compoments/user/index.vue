@@ -1,143 +1,76 @@
 <template>
-    <div>
-        <header class='header'>
-            <div class="cont">
-                <img class='profile-image' src='/images/profile.jpg'></img>
-                <div class="profile-content">
-                    <h1>{{name}}</h1>
-                    <h1>{{description}}</h1>
-                    <ul class="social-icon"></ul>
+    <div class='index'>
+        <div class="top">
+            <nav class='nav'>
+                <router-link to='/' class="nav-item">首页<span></span></router-link>
+                <router-link to='/notes' class="nav-item">笔记<span></span></router-link>
+                <router-link to='/recommends' class="nav-item">友链<span></span></router-link>
+                <router-link to='/other' class="nav-item">其他<span></span></router-link>
+                <div class='search'>
+                    搜索：<input type="text">
                 </div>
-                <a href="#" class="btn-contact">
-                    <i class="icon-quill"></i>&nbsp;我的简历
-                </a>
-            </div>
-        </header>
-        <div class="section-wapper">
-            <div class="row">
-                <div class="left-box">
-                    <div class="section-inner">
-                        <h2>文章</h2>
-                        <transition-group name='test'>
-                            <div class="article" v-for='(a,index) in articles' :key='"article"+index'>
-                                <h3 class="article-title">
-                                    <router-link :to='"/article/details/"+a._id'>{{a.title||'无标题'}}</router-link>  
-                                </h3>
-                                <p class="article-des">{{a.description||'暂时没有任何描述...'}}</p> 
-                                <ul class="article-oper">
-                                    <li>分类:{{a.category.join(',')}}</li>
-                                    <li>发表时间:{{getDate(a.createTime)}}</li> 
-                                    <li><a href="#">{{a.pv}}个浏览</a></li>
-                                    <li>{{a.review}}条评论</li>
-                                </ul>
-                            </div>	
-                        </transition-group>
-                    </div>
-                </div>
-                <div class="right-box">
-                    <div class="section-inner">
-                        <ul class="info">
-                            <li><i class="icon-location"></i>{{address}}</li>
-                            <li><i class="icon-link"></i>{{email}}</li>
-                        </ul>
-                    </div>
-                    <div class="section-inner">
-                        <h2>分类</h2>
-                        <ul class="category">
-                            <li v-for='c in categories'>
-                                <a href="#">{{c.name}}
-                                <span class="badge">{{c.articles.length}}</span></a>
-                            </li>
-                                
-                        </ul>
-                    </div>
-					<div class="section-inner">
-                        <h2>推荐</h2>
-                        <ul class="recommend">
-                            <li v-for='r in recommends'>
-                                <a :href = 'r.url' target='_blank'>
-                                    <i class='icon-link'></i>
-								    {{r.name}}
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
+            </nav>
+        </div>
+        <div class='container'>
+            <keep-alive>
+                <router-view></router-view>
+            </keep-alive>
         </div>
     </div>
 </template>
 
 <script>
-    export default{
-        data:function(){
-            return{
-                name:'',
-                description:'',
-                address:'',
-                email:'',
-                articles:[],
-                categories:[],
-                recommends:[],
-                date:''
-            }
-        },
-        activated:function(){
-            this.date = new Date(2017,3,15);
-            hl.ajax.get('/user/info',{},
-                (json)=>{
-                    this.name = json.data.name;
-                    this.description = json.data.description;
-                    this.address = json.data.address;
-                    this.email = json.data.email;
-                },
-                (str)=>{
-                    console.log(str);
-                });
-            hl.ajax.get('/articles',{},
-                (json)=>{
-                    if(json.success)
-                        this.articles = json.data;
-                },
-                (str)=>{
-                    console.log(str);
-                });
-            hl.ajax.get('/categories',{},
-                (json)=>{
-                    if(json.success)
-                        this.categories = json.data;
-                },
-                (str)=>{
-                    console.log(str);
-                });
-            hl.ajax.get('/recommends',{},
-                (json)=>{
-                    if(json.success)
-                        this.recommends = json.data;
-                },
-                (str)=>{
-                    console.log(str);
-                });
-        },
-        methods:{
-            getDate:function(date){
-                return hl.date.format(date,'yyyy-MM-dd');
-            }
-        }
+    export default {
+        
     }
 </script>
 
-<style lang='less' scoped>
-    @import '../../../styles/user/index.less';
-    a{
-        text-decoration:none;
-    }
-    .test-enter,.test-leave-active{
-        margin-top: 100px;
-        opacity: 0;
-    }
-    .test-enter-active,.test-leave-active{
-        transition: all .5s ease-in;
-        transition-delay:.1s;
+<style lang="less" scoped>
+    .index{
+        .top{
+            margin-top: 50px;
+            .nav{
+                width: 1140px;
+                margin:auto;
+                border-bottom: 1px solid #e7e7e7;
+                padding-bottom: 25px;
+                .nav-item{
+                    margin: 0 10px;
+                    color: #000;
+                    font-size: 24px;
+                    position: relative;
+                    display: inline-block;
+                    span{
+                        position:absolute;
+                        left: 0;
+                        top: 120%;
+                        width: 0;
+                        height: 1px;
+                        background: #000;
+                        display: inline-block;
+                        transition: all .4s ease-in-out;
+                    }
+                    &:hover > span {
+                        width: 48px;
+                    }
+                }
+                .search{
+                    float: right;
+                    margin-right: 10px;
+                    font-size: 20px;
+                    input{
+                        border: none;
+                        outline:none;
+                        border-bottom: 1px solid #aaa;
+                    }
+                }
+            }
+        }
+        .container{
+            width: 1140px;
+            margin:auto;
+        }
     }
 </style>
+
+

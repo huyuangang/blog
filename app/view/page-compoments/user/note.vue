@@ -1,8 +1,7 @@
 <template>
     <div class='detail'>
-        <nav class='nav'><router-link to="/">主页</router-link>&nbsp;&gt;&nbsp;文章详情页</nav>
         <header class="header">
-            <h1>{{title||'无标题'}} <span>(&nbsp;{{getDate(createTime,'yyyy/MM/dd')}}&nbsp;)</span></h1>
+            <h1>{{title||'无标题'}} <span><format-date :date='createTime' format='yyyy-MM-dd'></format-date></span></h1>
             <p>{{description||'暂时没有任何描述...'}}</p>
         </header>
         <div class="section-wapper">
@@ -13,7 +12,10 @@
 
 
 <script>
+    import axios from 'axios';
+    import formatDate from '@components/format-date.vue';
     export default{
+        components:{formatDate},
         data:function(){
             return{
                 title:'',
@@ -24,50 +26,35 @@
         },
         activated:function(){
             var id = this.$route.params.id;
-            hl.ajax.get('/article/details/'+id+'/data',{},
-                (json)=>{
-                    if(json.success){
-                        var data = json.data;
-                        this.title = data.title;
-                        this.description = data.description;
-                        this.content = data.html;
-                        this.createTime = data.createTime;
-                    }
-                }
-            )
-        },
-        methods:{
-            getDate:function(date,formatStr){
-                return hl.date.format(date,formatStr);
-            }
+            axios
+                .get('/api/note/'+id+'/data')
+                .then((res) => {
+                    let data = res.data.data;
+                    this.title = data.title;
+                    this.description = data.description;
+                    this.content = data.html;
+                    this.createTime = data.createTime;
+                })
+                .catch((e) => {
+                    console.log(e);
+                })
         }
     }
 </script>
 
 <style lang="less">
     .detail{
-        .nav{
-            padding:15px 10px 15px 50px;
-            border-bottom:1px solid #aaa;
-            color:#fff;
-            background:#778492;
-            a{
-                color:#dae3e7;
-                &:hover{
-                    color:#fff;
-                }
-            }
-        }
+        width:960px;
+        margin: auto;
         .header{
-            width: 768px;
-            margin: auto;
             margin-top:40px;
             margin-bottom:20px;
             padding-bottom:10px;
             border-bottom:2px solid #aaa;
             h1{
-                font-size:2.6em;
+                font-size:24px;
                 span{
+                    font-size: 16px;
                     color:#666;
                 }
             }
@@ -75,32 +62,28 @@
         p{
             margin: 30px 0;
         }
-        .section-wapper{
-            width: 768px;
-            margin:auto;
-        }
         .content{
             padding-bottom: 30px;
             h1,h2,h3,h4,h5,h6{
                 margin:1.5em 0;
             }
             h1{
-                font-size:2.4em;
+                font-size:24px;
             }
             h2{
-                font-size:2.15em;
+                font-size:22px;
             }
             h3{
-                font-size:1.7em;
+                font-size:20px;
             }
             h4{
-                font-size:1.25em;
+                font-size:16px;
             }
             h5{
-                font-size:1em;
+                font-size:14px;
             }
             h6{
-                font-size:.85em;
+                font-size:12px;
             }
             p, pre, blockquote {
                 margin: 0 0 1.1em;
@@ -111,13 +94,13 @@
             blockquote{
                 border-left: 10px solid #aaa;
                 padding: 10px 20px;
-                background-color: rgba(128,128,128,0.2);
+                background-color: #f4f7f8;
                 p:last-child{
                     margin-bottom: 0;
                 }
             }
             pre{
-                background-color: rgba(128,128,128,0.2);
+                background-color: #f4f7f8;
                 border-top-right-radius: 5px;
                 border-bottom-right-radius: 5px;
                 padding: 15px 20px;

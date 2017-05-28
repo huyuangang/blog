@@ -55,7 +55,9 @@ module.exports = {
         alias: {
             'vue$': 'vue/dist/vue.js',
             '@page-components': path.resolve(__dirname, '../app/view/page-compoments'),
-            '@styles': path.resolve(__dirname,'../app/styles')
+            '@styles': path.resolve(__dirname, '../app/styles'),
+            '@public': path.resolve(__dirname, '../app/public'),
+            '@components': path.resolve(__dirname, '../app/components')
         }
     },
     devServer: {

@@ -4,22 +4,32 @@ var Category = require('../../db/model/category.js')
 var Recommend = require('../../db/model/recommend.js')
 
 module.exports = function (app) {
-	app.get('/index', function (req, res) {
-		res.render('user');
-	});
-	app.get('', function (req, res) {
-		res.render('user');
-	});
 
-	app.get('/test', function (req, res) {
+	//页面
+	app.get('/index', (req, res) => {
+		res.render('user');
+	});
+	app.get('', (req, res) => {
+		res.render('user');
+	});
+	app.get('/test', (req, res) => {
+		res.render('user');
+	})
+	app.get('/notes', (req, res) => {
+		res.render('user');
+	})
+	app.get('/note/:id', (req, res) => {
+			res.render('user');
+	});
+	app.get('/recommends', (req, res) => {
+		res.render('user');
+	})
+	app.get('/other', (req, res) => {
 		res.render('user');
 	})
 
-	app.get('/article/details/:id', function (req, res) {
-			res.render('user');
-	});
-
-	app.get('/user/info', function (req, res) {
+	//数据响应
+	app.get('/api/user/info', function (req, res) {
 		res.json({
 			code: 1,
 			data: {
@@ -30,7 +40,7 @@ module.exports = function (app) {
 			}
 		})
 	});
-	app.get('/articles', function (req, res) {
+	app.get('/api/notes', function (req, res) {
 		Article.find({status:true}, function (err, cb) {
 			if (err) {
 				res.json({
@@ -46,7 +56,7 @@ module.exports = function (app) {
 			}
 		})
 	});
-	app.get('/article/details/:id/data', function (req, res) {
+	app.get('/api/note/:id/data', function (req, res) {
 		Article.findOne({ _id: req.params.id }, function (err, cb) {
 			if(err){
 				res.json({
@@ -72,7 +82,7 @@ module.exports = function (app) {
 		})
 	})
 
-	app.get('/categories', function (req, res) {
+	app.get('/api/categories', function (req, res) {
 		Category.find({}, function (err, cb) {
 			if (err) {
 				res.json({
@@ -89,7 +99,7 @@ module.exports = function (app) {
 		})
 	})
 
-	app.get('/recommends', function (req, res) {
+	app.get('/api/recommends', function (req, res) {
 		Recommend.find({}, function (err, cb) {
 			if (err) {
 				res.json({

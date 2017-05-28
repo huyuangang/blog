@@ -48,9 +48,9 @@ module.exports = function (app) {
 	//后台提交登录表单
 	app.post('/admin/login', function (req, res) {
 		var json = req.body;
-		if (json.username === '123' && json.password === '123') {
+		if (json.username === 'hyg.blog.admin' && json.password === '123') {
 			req.session.user = {
-				name: '123',
+				name: 'hyg.blog.admin',
 				password: '123'
 			}
 			res.redirect('/admin/article');
@@ -305,7 +305,7 @@ module.exports = function (app) {
 
 		})
 	})
-	//保存推荐信息
+	//添加推荐信息
 	app.post('/admin/recommend/new', function (req, res) {
 		var newReco = new Recommend(req.body);
 		newReco.save(function (err) {
