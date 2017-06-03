@@ -41,7 +41,7 @@
         },
         methods:{
             deleteArticle:function(id){
-                axios.del('/admin/article/'+id)
+                axios.delete('/admin/article/'+id)
                     .then((res)=>{
                         this.getArticle();
                     })

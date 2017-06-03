@@ -41,20 +41,24 @@ module.exports = function (app) {
 		})
 	});
 	app.get('/api/notes', function (req, res) {
-		Article.find({status:true}, function (err, cb) {
-			if (err) {
-				res.json({
-					error: true,
-					data: err
-				})
-			}
-			else {
-				res.json({
-					success: true,
-					data: cb
-				})
-			}
-		})
+		Article
+			.find({ status: true })
+			.sort({'createTime': -1})
+			.exec((err, cb) => {
+				if (err) {
+					res.json({
+						error: true,
+						data: err
+					})
+				}
+				else {
+					res.json({
+						success: true,
+						data: cb
+					})
+				}
+			})
+		
 	});
 	app.get('/api/note/:id/data', function (req, res) {
 		Article.findOne({ _id: req.params.id }, function (err, cb) {

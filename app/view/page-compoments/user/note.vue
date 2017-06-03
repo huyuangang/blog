@@ -111,6 +111,12 @@
                     }
                 }
             }
+            a{
+                color:#217ac0;
+                &:hover{
+                    text-decoration: underline;
+                }
+            }
         }
     } 
 </style>

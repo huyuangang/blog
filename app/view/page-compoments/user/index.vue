@@ -21,7 +21,6 @@
 
 <script>
     export default {
-        
     }
 </script>
 
@@ -29,6 +28,9 @@
     .index{
         .top{
             margin-top: 50px;
+            .mobile-nav{
+                display:none;
+            }
             .nav{
                 width: 1140px;
                 margin:auto;
