@@ -30,8 +30,8 @@
                     { name: '文章管理', urls: '/admin/article' },
                     { name: '分类管理', urls: '/admin/category', },
                     { name: '推荐管理', urls: '/admin/recommend' },
+                    { name: '日志管理', urls: '/admin/logs' },
                     { name: '样例管理', urls: '/admin/demo' },
-                    { name: '杂记管理', urls: '#' },
                     { name: '新建文章', urls: '/admin/article/new'}
                 ]
             }

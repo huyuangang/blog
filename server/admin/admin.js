@@ -1,8 +1,19 @@
-var Info = require('../../db/model/info.js')
-var Article = require('../../db/model/article.js')
-var Category = require('../../db/model/category.js')
-var Recommend = require('../../db/model/recommend.js')
+const Info = require('../../db/model/info.js'),
+	  Article = require('../../db/model/article.js'),
+	  Category = require('../../db/model/category.js'),
+	  Recommend = require('../../db/model/recommend.js'),
+	  Log = require('../../db/model/logs.js')
 
+
+
+function addLog(content) {
+	let newLog = new Log({ content });
+	newLog.save((err) => {
+		if (err)
+			return false;
+		return true;
+	})
+}	  
 
 module.exports = function (app) {
 
@@ -41,8 +52,12 @@ module.exports = function (app) {
 		else
 			res.render('admin');
 	});
-
-
+	app.get('/admin/logs', function (req, res) {
+		if (req.session.user === undefined)
+			res.redirect('/admin/login');
+		else
+			res.render('admin');
+	});
 
 
 	//后台提交登录表单
@@ -61,11 +76,7 @@ module.exports = function (app) {
 			})
 		}
 	});
-
-
-
 	//获取文章
-
 	app.get('/admin/article/all', (req, res) => {
 		Article.find({}, function (err, cb) {
 			if (err) {
@@ -96,7 +107,6 @@ module.exports = function (app) {
 			}
 		})
 	})
-
 	//发布文章接口
 	app.post('/admin/article/new', function (req, res) {
 		var data = req.body;
@@ -213,7 +223,6 @@ module.exports = function (app) {
 		})
 	})
 
-
 	//获取分类信息
 	app.get('/admin/category/data', function (req, res) {
 		Category.find({}, function (err, cb) {
@@ -286,7 +295,6 @@ module.exports = function (app) {
 		})
 	})
 
-
 	//获取推荐信息
 	app.get('/admin/recommend/data', function (req, res) {
 		Recommend.find({}, function (err, cb) {
@@ -338,4 +346,56 @@ module.exports = function (app) {
 			}
 		})
 	})
+	//获取日志
+	app.get('/admin/logs/data', (req, res) => {
+		Log
+			.find({})
+			.sort({'createTime': -1 })
+			.exec((err, cb) => {
+			if (err) {
+				res.json({
+					err: true,
+					data: err
+				})
+			}
+			else {
+				res.json({
+					success: true,
+					data: cb
+				})
+			}
+		})
+	})
+	app.post('/admin/logs/new', (req, res) => {
+		let newLog = new Log(req.body);
+		newLog.save((err) => {
+			if (err) {
+				res.json({
+					err: true,
+					data: err
+				})
+			} else {
+				res.json({
+					success: true,
+					data: '推荐存储成功'
+				})
+			}
+		})
+	})
+	app.delete('/admin/logs/:id', (req, res) => {
+		Log.remove({ _id: req.params.id }, (err) => {
+			if (err) {
+				res.json({
+					code: 0,
+					data: err
+				})
+			} else {
+				res.json({
+					code: 1,
+					data: '日志删除成功'
+				})
+			}
+		})
+	})
+
 }

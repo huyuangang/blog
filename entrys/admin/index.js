@@ -51,6 +51,14 @@ const router = new VueRouter({
 							resolve(require('@page-components/admin/newArticle.vue'));
 						}, 'newArticle');
 					}
+				},
+				{
+					path: 'logs',
+					component: resolve => {
+						require.ensure([], () => {
+							resolve(require('@page-components/admin/logs.vue'));
+						}, 'logs');
+					}
 				}
 			]
 		}
