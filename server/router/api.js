@@ -159,7 +159,7 @@ module.exports = function (app) {
 		})
 	});
 	//修改文章状态
-	app.put('/admin/article/status/:id', (req, res) => {
+	app.put('/admin/note/status/:id', (req, res) => {
 		Article.findOne({ _id: req.params.id }, (err, cb) => {
 			if (err) {
 				console.log(err);
@@ -245,7 +245,7 @@ module.exports = function (app) {
 			} else {
 				res.json({
 					success: true,
-					data: '章节存储成功'
+					data: '分类存储成功'
 				})
 			}
 		})
