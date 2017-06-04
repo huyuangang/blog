@@ -38,9 +38,9 @@
 
 
 <script>
-    import hl from '@public/js/common.js'
-    var marked = require('marked');
-    var hls = require('highlight.js');
+    import {getCates, publishNote} from '../../../public/js/api.js';
+    let marked = require('marked');
+    let hls = require('highlight.js');
     hls.configure({
         tabReplace:'    '
     })
@@ -69,55 +69,36 @@
                 categories:[]
             }
         },
-        methods:{
-            sumbit:()=>{
-                console.log('sumbit');
-            }
-        },
         computed:{
             markText:function(){
                 return marked(this.content);
             }
         },
         activated:function(){
-            var me = this;
-            function cateSuccess(json){
-                me.categories = json.data;
-            }
-            hl.ajax.get('/admin/category/data',{},cateSuccess,(str)=>{console.log(str)});
-            // var id = this.$route.params.id;
-            // if(!id)
-            //     return;
-            // hl.ajax.get('/admin/article/'+id,{},
-            //     (json)=>{
-            //         if(json.success){
-            //             var data = json.data;
-            //             this.title = data.title;
-            //             this.description = data.description;
-            //             this.cates = data.category;
-            //             this.content = data.text;
-            //         }
-            //     }
-            // )
+            getCates()
+                .then((res)=>{
+                    this.categories = res.data.data;
+                })
+                .catch((e) => {
+                    console.log(e);
+                })
 
         },
         methods: {
-            sumbit:function(){
-                var id = this.$route.params.id;
-                var me = this;
-                function s(str){
-                    console.log(str);
-                }
-                if(me.newCate !== '')
-                    me.cates.push(me.newCate);
-                hl.ajax.post('/admin/article/new',{
-                    title:me.title,
-                    description:me.description,
-                    category:me.cates,
-                    text:me.content,
-                    html:me.markText,
-                    newCate:me.newCate
-                },s,s)
+            sumbit () {
+                this.cates.push(this.newCate);
+                publishNote({
+                    title:this.title,
+                    description:this.description,
+                    category:this.cates,
+                    text:this.content,
+                    html:this.markText,
+                    newCate:this.newCate
+                }).then((res) => {
+                    this.$router.push('/admin/article');
+                }).catch((e) => {
+                    console.log(e);
+                })
             }
         }
     }

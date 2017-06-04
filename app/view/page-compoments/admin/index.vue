@@ -1,7 +1,6 @@
 <template>
     <div>
         <div class="top">
-			
 			<nav class="nav">
                 <a class='home' href="/">首页</a>
                 <ul>
@@ -10,7 +9,6 @@
                     </li>
                 </ul>
 			</nav>
-			
 		</div>
 		<div class="section-wapper">
             <transition name='view' mode='out-in'>

@@ -12,7 +12,7 @@
 
 
 <script>
-    import axios from 'axios';
+    import {getNoteById} from '../../../public/js/api.js';
     import formatDate from '@components/format-date.vue';
     export default{
         components:{formatDate},
@@ -25,9 +25,8 @@
             }
         },
         activated:function(){
-            var id = this.$route.params.id;
-            axios
-                .get('/api/note/'+id+'/data')
+            let id = this.$route.params.id;
+            getNoteById(id)
                 .then((res) => {
                     let data = res.data.data;
                     this.title = data.title;

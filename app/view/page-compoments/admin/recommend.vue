@@ -32,7 +32,7 @@
 </template>
 
 <script>
-    import axios from 'axios';
+    import {getRecommends, addRecommend, deleteRecommendById} from '../../../public/js/api.js';
     import formatDate from '@components/format-date.vue';
     import modal from '@components/modal.vue';
     export default{
@@ -48,24 +48,24 @@
             formatDate, modal
         },
         activated:function(){
-            this.getRcommend();
+            this.getRecommend();
         },
         methods:{
-            getRcommend () {
-                axios.get('/admin/recommend/data')
-                .then((res)=>{
-                    if(res.data.success)
-                        this.recommends = res.data.data;
-                })
-                .catch((e)=>{
-                    console.log(e);
-                });
+            getRecommend () {
+                getRecommends()
+                    .then((res)=>{
+                        if(res.data.success)
+                            this.recommends = res.data.data;
+                    })
+                    .catch((e)=>{
+                        console.log(e);
+                    });
             },
             deleteRcommend (id) {
-                axios.delete('/admin/recommend/'+id)
+                deleteRecommendById(id)
                     .then((res)=>{
                         if(res.data.code === 1)
-                            this.getRcommend();
+                            this.getRecommend();
                     })
                     .catch((e) => {
                         console.log(e);
@@ -78,14 +78,14 @@
                 this.showModal = false;
             },
             addRecommend () {
-                axios.post('/admin/recommend/new',{
+                addRecommend({
                         name: this.addName,
                         url: this.addUrl
                 }).then((res)=>{
                     console.log(res.data);
                     if(res.data.success){
                         this.showModal = false;
-                        this.getRcommend();
+                        this.getRecommend();
                     }
                 }).catch((e) => {
                     console.log(e);

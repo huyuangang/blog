@@ -19,7 +19,7 @@ module.exports = function (app) {
 		})
 	});
 	//后台提交登录表单
-	app.post('/admin/login', (req, res) => {
+	app.post('/api/login', (req, res) => {
 		var json = req.body;
 		if (json.username === 'hyg.blog.admin' && json.password === '123') {
 			req.session.user = {
@@ -102,7 +102,7 @@ module.exports = function (app) {
 		})
 	})
 	//发布文章接口
-	app.post('/admin/note/new', (req, res) => {
+	app.post('/api/note/new', (req, res) => {
 		var data = req.body;
 		var article = new Article({
 			title: data.title,
@@ -159,7 +159,7 @@ module.exports = function (app) {
 		})
 	});
 	//修改文章状态
-	app.put('/admin/note/status/:id', (req, res) => {
+	app.put('/api/note/status/:id', (req, res) => {
 		Article.findOne({ _id: req.params.id }, (err, cb) => {
 			if (err) {
 				console.log(err);
@@ -181,7 +181,7 @@ module.exports = function (app) {
 		})
 	})
 	//删除文章
-	app.delete('/admin/note/:id', (req, res) => {
+	app.delete('/api/note/:id', (req, res) => {
 		Article.findOne({ _id: req.params.id }, (err, cb) => {
 			if (err)
 				console.log(err);

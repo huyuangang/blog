@@ -9,6 +9,7 @@
 
 <script>
     import axios from 'axios'
+    import {getLogs} from '../../../public/js/api.js';
     export default{
         data() {
             return {
@@ -20,8 +21,7 @@
         },
         methods: {
             getLogs () {
-                axios
-                    .get('/admin/logs/data')
+                getLogs()
                     .then((res) => {
                         this.logs = res.data.data;
                     })

@@ -21,8 +21,8 @@
 </template>
 
 <script>
+    import {getCates, deleteCateById} from '../../../public/js/api.js';
     import formatDate from '@components/format-date.vue';
-    import axios from 'axios';
     export default{
         data:function(){
             return {
@@ -35,8 +35,8 @@
         },
         methods:{
             deleteCategory:function(id){
-                axios.delete('/admin/category/'+id)
-                    then((res)=>{
+                deleteCateById(id)
+                    .then((res)=>{
                         this.getCategory();
                     })
                     .catch((e)=>{
@@ -44,7 +44,7 @@
                     });
             },
             getCategory:function(){
-                axios.get('/admin/category/data')
+                getCates()
                     .then((res)=>{
                         if(res.data.success)
                             this.categories = res.data.data;

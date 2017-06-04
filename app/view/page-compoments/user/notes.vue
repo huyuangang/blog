@@ -39,7 +39,7 @@
 
 
 <script>
-    import axios from 'axios';
+    import {getNotes, getCates} from '../../../public/js/api.js'
     import formatDate from '@components/format-date.vue';
     export default{
         components:{formatDate},
@@ -53,7 +53,7 @@
             }
         },
         activated (){
-            axios.get('/api/notes')
+            getNotes()
                 .then((res)=>{
                     if(res.data.success)
                         this.articles = res.data.data;
@@ -66,7 +66,7 @@
                 .catch((e)=>{
                     console.log(e);
                 });
-            axios.get('/api/categories')
+            getCates()
                 .then((res)=>{
                     if(res.data.success)
                         this.categories = res.data.data;

@@ -7,7 +7,7 @@
 </template>
 
 <script>
-    import axios from 'axios'
+    import {getRecommends} from '../../../public/js/api.js';
     export default {
         data () {
             return {
@@ -15,7 +15,7 @@
             }
         },
         activated () {
-            axios.get('/api/recommends')
+            getRecommends()
                 .then((res) => {
                     if(res.data.success)
                         this.recommends = res.data.data;

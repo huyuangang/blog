@@ -27,7 +27,7 @@
 </template>
 
 <script>
-    import axios from 'axios';
+    import {getLogs, addLog, deleteLogById} from '../../../public/js/api.js';
     import modal from '@components/modal.vue';
     export default {
         components: {modal},
@@ -43,8 +43,7 @@
         },
         methods: {
             getLogs () {
-                axios
-                    .get('/admin/logs/data')
+                getLogs()
                     .then((res) => {
                         this.logs = res.data.data;
                     })
@@ -53,8 +52,7 @@
                     })
             },
             deleteLog (id) {
-                axios
-                    .delete(`/admin/logs/${id}`)
+                deleteLogById(id)
                     .then((res) => {
                         console.log(res.data);
                         this.getLogs();
@@ -64,9 +62,10 @@
                     })
             },
             addLog () {
-                axios.post('/admin/logs/new',{
-                        content: this.addContent,
-                }).then((res)=>{
+                addLog({
+                    content: this.addContent
+                })
+                .then((res)=>{
                     if(res.data.success){
                         this.showModal = false;
                         this.getLogs();

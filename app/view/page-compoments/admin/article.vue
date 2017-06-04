@@ -20,15 +20,15 @@
                 <a :href='"/note/"+a._id'><i class="icon-eye" title='查看'></i></a>
                 <a href='#'><i class="icon-pencil" title='编辑'></i></a>
                 <a @click='changeStatus(a._id)'><i class="icon-cog" title='切换状态'></i></a>
-                <a @click='deleteArticle(a._id)'><i class="icon-bin" title='删除' ></i></a>
+                <a @click='deleteNote(a._id)'><i class="icon-bin" title='删除' ></i></a>
             </span>
         </div>
     </div>
 </template>
 
 <script>
+    import {deleteNoteById, getNotes, changeNoteStatusById} from '../../../public/js/api.js';
     import formatDate from '@components/format-date.vue';
-    import axios from 'axios';
     export default{
         data:function(){
             return {
@@ -37,32 +37,32 @@
         },
         components:{formatDate},
         activated:function(){
-            this.getArticle();
+            this.getNotes();
         },
         methods:{
-            deleteArticle:function(id){
-                axios.delete('/admin/article/'+id)
+            deleteNote:function(id){
+                deleteNoteById(id)
                     .then((res)=>{
-                        this.getArticle();
+                        this.getNotes();
                     })
                     .catch((e)=>{
                         console.log(e);
                     });
             },
-            getArticle:function(){
-                axios.get('/admin/article/all')
+            getNotes:function(){
+                getNotes()
                     .then((res)=>{
-                    if(res.data.success)
-                        this.articles = res.data.data;
-                })
-                .catch((e)=>{
-                    console.log(e);
-                });
+                        if(res.data.success)
+                            this.articles = res.data.data;
+                    })
+                    .catch((e)=>{
+                        console.log(e);
+                    });
             },
             changeStatus:function(id){
-                axios.put('/admin/article/status/'+id)
+                changeNoteStatusById(id)
                     .then((res)=>{
-                        this.getArticle();
+                        this.getNotes();
                     })
                     .catch((e)=>{
                         console.log(e);
