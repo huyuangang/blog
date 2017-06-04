@@ -22,8 +22,8 @@ app.use(session({
 	saveUninitialized:true
 }))
 
-require('./user/user.js')(app);
-require('./admin/admin.js')(app);
+require('./router/page-render.js')(app);
+require('./router/api.js')(app);
 
 var server = app.listen(8081,function(){
     var port = server.address().port;

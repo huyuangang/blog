@@ -17,8 +17,8 @@
             <span class='pv'>{{a.pv}}</span>
             <span class='review'>{{a.review}}</span>
             <span class='op'>
-                <a :href='"/article/details/"+a._id'><i class="icon-eye" title='查看'></i></a>
-                <a :href='"/admin/article/edit/"+a._id'><i class="icon-pencil" title='编辑'></i></a>
+                <a :href='"/note/"+a._id'><i class="icon-eye" title='查看'></i></a>
+                <a href='#'><i class="icon-pencil" title='编辑'></i></a>
                 <a @click='changeStatus(a._id)'><i class="icon-cog" title='切换状态'></i></a>
                 <a @click='deleteArticle(a._id)'><i class="icon-bin" title='删除' ></i></a>
             </span>

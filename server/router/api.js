@@ -1,67 +1,25 @@
+
 const Info = require('../../db/model/info.js'),
 	  Article = require('../../db/model/article.js'),
 	  Category = require('../../db/model/category.js'),
 	  Recommend = require('../../db/model/recommend.js'),
 	  Log = require('../../db/model/logs.js')
 
-
-
-function addLog(content) {
-	let newLog = new Log({ content });
-	newLog.save((err) => {
-		if (err)
-			return false;
-		return true;
-	})
-}	  
-
 module.exports = function (app) {
-
-	//后台登录页面
-	app.get('/admin/login', function (req, res) {
-		res.render('login')
+	//获取个人信息
+    app.get('/api/info', (req, res) => {
+		res.json({
+			code: 1,
+			data: {
+				name: '胡元港',
+				description: '书籍是人类进步的阶梯',
+				address: '四川，绵阳，涪城区',
+				email: '1730790894@qq.com'
+			}
+		})
 	});
-	//后台主页
-	app.get('/admin/article', function (req, res) {
-		if (req.session.user === undefined)
-			res.redirect('/admin/login');
-		else
-			res.render('admin')
-	});
-	app.get('/admin/article/new', function (req, res) {
-		if (req.session.user === undefined)
-			res.redirect('/admin/login');
-		else
-			res.render('admin');
-	});
-	app.get('/admin/category', function (req, res) {
-		if (req.session.user === undefined)
-			res.redirect('login');
-		else
-			res.render('admin')
-	});
-	app.get('/admin/recommend', function (req, res) {
-		if (req.session.user === undefined)
-			res.redirect('/admin/login');
-		else
-			res.render('admin');
-	});
-	app.get('/admin/demo', function (req, res) {
-		if (req.session.user === undefined)
-			res.redirect('/admin/login');
-		else
-			res.render('admin');
-	});
-	app.get('/admin/logs', function (req, res) {
-		if (req.session.user === undefined)
-			res.redirect('/admin/login');
-		else
-			res.render('admin');
-	});
-
-
 	//后台提交登录表单
-	app.post('/admin/login', function (req, res) {
+	app.post('/admin/login', (req, res) => {
 		var json = req.body;
 		if (json.username === 'hyg.blog.admin' && json.password === '123') {
 			req.session.user = {
@@ -77,38 +35,74 @@ module.exports = function (app) {
 		}
 	});
 	//获取文章
-	app.get('/admin/article/all', (req, res) => {
-		Article.find({}, function (err, cb) {
-			if (err) {
-				res.json({
-					error: true,
-					data: err
+	app.get('/api/notes', (req, res) => {
+		if (req.session.user === undefined) {
+			Article
+				.find({ status: true })
+				.sort({'createTime': -1})
+				.exec((err, cb) => {
+					if (err) {
+						res.json({
+							error: true,
+							data: err
+						})
+					}
+					else {
+						res.json({
+							success: true,
+							data: cb
+						})
+					}
 				})
-			} else {
+		}
+		else {
+			Article
+				.find({})
+				.sort({ 'createTime': -1 })
+				.exec((err, cb) => {
+					if (err) {
+						res.json({
+							error: true,
+							data: err
+						})
+					} else {
+						res.json({
+							success: true,
+							data: cb
+						})
+					}
+				})
+		}
+		
+	});
+	//获取指定文章
+	app.get('/api/note/:id', (req, res) => {
+		Article.findOne({ _id: req.params.id }, (err, cb) => {
+			if(err){
 				res.json({
-					success: true,
-					data: cb
+					success:false,
+					data:err
 				})
 			}
-		})
-	})
-	app.get('/admin/article/:id', (req, res) => {
-		Article.findOne({ _id: req.params.id }, (err, cb) => {
-			if (err) {
-				res.json({
-					error: true,
-					data: err
+			else{
+				cb.pv++;
+				cb.save((err)=>{
+					if(err){
+						console.log(err);
+					}
+					else{
+						res.json({
+							success:true,
+							data:cb
+						});
+					}
 				})
-			} else {
-				res.json({
-					success: true,
-					data: cb
-				})
+				
 			}
 		})
 	})
 	//发布文章接口
-	app.post('/admin/article/new', function (req, res) {
+	app.post('/admin/note/new', (req, res) => {
 		var data = req.body;
 		var article = new Article({
 			title: data.title,
@@ -117,23 +111,23 @@ module.exports = function (app) {
 			html: data.html,
 			text: data.text
 		});
-		article.save(function (err) {
+		article.save((err) => {
 			if (err)
 				console.log('文章存储错误');
 			else {
 				if (data.newCate !== '') {
 					var cate = new Category({ name: data.newCate });
-					cate.save(function (err) {
+					cate.save((err) => {
 						if (err)
 							console.log(err);
 						else {
-							data.category.forEach(function (item) {
-								Category.findOne({ name: item }, function (err, cb) {
+							data.category.forEach((item) => {
+								Category.findOne({ name: item }, (err, cb) => {
 									if (err)
 										console.log(err);
 									else {
 										cb.articles.push(article._id);
-										cb.save(function (err) {
+										cb.save((err) => {
 											if (err)
 												console.log(err);
 										})
@@ -143,13 +137,13 @@ module.exports = function (app) {
 						}
 					})
 				} else {
-					data.category.forEach(function (item) {
-						Category.findOne({ name: item }, function (err, cb) {
+					data.category.forEach((item) => {
+						Category.findOne({ name: item }, (err, cb) => {
 							if (err)
 								console.log(err);
 							else {
 								cb.articles.push(article._id);
-								cb.save(function (err) {
+								cb.save((err) => {
 									if (err)
 										console.log(err);
 								})
@@ -165,14 +159,14 @@ module.exports = function (app) {
 		})
 	});
 	//修改文章状态
-	app.put('/admin/article/status/:id', function (req, res) {
-		Article.findOne({ _id: req.params.id }, function (err, cb) {
+	app.put('/admin/article/status/:id', (req, res) => {
+		Article.findOne({ _id: req.params.id }, (err, cb) => {
 			if (err) {
 				console.log(err);
 			}
 			else {
 				cb.status = !cb.status;
-				cb.save(function (err) {
+				cb.save((err) => {
 					if (err) {
 						console.log(err);
 					}
@@ -187,18 +181,18 @@ module.exports = function (app) {
 		})
 	})
 	//删除文章
-	app.delete('/admin/article/:id', function (req, res) {
-		Article.findOne({ _id: req.params.id }, function (err, cb) {
+	app.delete('/admin/note/:id', (req, res) => {
+		Article.findOne({ _id: req.params.id }, (err, cb) => {
 			if (err)
 				console.log(err);
 			else {
 				if (cb.category.length !== 0) {
-					cb.category.forEach(function (item) {
-						Category.findOne({ name: item }, function (err, cb) {
+					cb.category.forEach((item) => {
+						Category.findOne({ name: item }, (err, cb) => {
 							var index = cb.articles.indexOf(req.params.id);
 							if (index !== -1) {
 								cb.articles.splice(index, 1);
-								cb.save(function (err) {
+								cb.save((err) => {
 									if (err)
 										console.log(err);
 								})
@@ -206,7 +200,7 @@ module.exports = function (app) {
 						})
 					})
 				}
-				Article.remove({ _id: req.params.id }, function (err) {
+				Article.remove({ _id: req.params.id }, (err) => {
 					if (err) {
 						res.json({
 							code: 0,
@@ -224,8 +218,8 @@ module.exports = function (app) {
 	})
 
 	//获取分类信息
-	app.get('/admin/category/data', function (req, res) {
-		Category.find({}, function (err, cb) {
+	app.get('/api/categories', (req, res) => {
+		Category.find({}, (err, cb) => {
 			if (err) {
 				res.json({
 					error: true,
@@ -240,9 +234,9 @@ module.exports = function (app) {
 		})
 	})
 	//添加分类
-	app.post('/admin/category/new', function (req, res) {
+	app.post('/api/category/new', (req, res) => {
 		var newCate = new Category(req.body);
-		newCate.save(function (err) {
+		newCate.save((err) => {
 			if (err) {
 				res.json({
 					error: true,
@@ -257,20 +251,20 @@ module.exports = function (app) {
 		})
 	})
 	//删除分类
-	app.delete('/admin/category/:id', function (req, res) {
-		Category.findOne({ _id: req.params.id }, function (err, cb) {
+	app.delete('/api/category/:id', (req, res) => {
+		Category.findOne({ _id: req.params.id }, (err, cb) => {
 			if (err)
 				console.log(err);
 			else {
 				if (cb.articles.length !== 0) {
-					cb.articles.forEach(function (id) {
-						Article.findOne({ _id: id }, function (err, ab) {
+					cb.articles.forEach((id) => {
+						Article.findOne({ _id: id }, (err, ab) => {
 							if (err)
 								console.log(err);
 							else {
 								var index = ab.category.indexOf(req.params.id);
 								ab.category.splice(index, 1);
-								ab.save(function (err) {
+								ab.save((err) => {
 									if (err)
 										console.log(err);
 								})
@@ -278,7 +272,7 @@ module.exports = function (app) {
 						})
 					})
 				}
-				Category.remove({ _id: req.params.id }, function (err) {
+				Category.remove({ _id: req.params.id }, (err) => {
 					if (err) {
 						res.json({
 							code: 0,
@@ -296,8 +290,8 @@ module.exports = function (app) {
 	})
 
 	//获取推荐信息
-	app.get('/admin/recommend/data', function (req, res) {
-		Recommend.find({}, function (err, cb) {
+	app.get('/api/recommends', (req, res) => {
+		Recommend.find({}, (err, cb) => {
 			if (err) {
 				res.json({
 					err: true,
@@ -314,9 +308,9 @@ module.exports = function (app) {
 		})
 	})
 	//添加推荐信息
-	app.post('/admin/recommend/new', function (req, res) {
+	app.post('/api/recommend/new', (req, res) => {
 		var newReco = new Recommend(req.body);
-		newReco.save(function (err) {
+		newReco.save((err) => {
 			if (err) {
 				res.json({
 					err: true,
@@ -331,8 +325,8 @@ module.exports = function (app) {
 		})
 	})
 	//删除推荐信息
-	app.delete('/admin/recommend/:id', function (req, res) {
-		Recommend.remove({ _id: req.params.id }, function (err) {
+	app.delete('/api/recommend/:id', (req, res) => {
+		Recommend.remove({ _id: req.params.id }, (err) => {
 			if (err) {
 				res.json({
 					code: 0,
@@ -347,7 +341,7 @@ module.exports = function (app) {
 		})
 	})
 	//获取日志
-	app.get('/admin/logs/data', (req, res) => {
+	app.get('/api/logs', (req, res) => {
 		Log
 			.find({})
 			.sort({'createTime': -1 })
@@ -366,7 +360,7 @@ module.exports = function (app) {
 			}
 		})
 	})
-	app.post('/admin/logs/new', (req, res) => {
+	app.post('/api/log/new', (req, res) => {
 		let newLog = new Log(req.body);
 		newLog.save((err) => {
 			if (err) {
@@ -382,7 +376,7 @@ module.exports = function (app) {
 			}
 		})
 	})
-	app.delete('/admin/logs/:id', (req, res) => {
+	app.delete('/api/log/:id', (req, res) => {
 		Log.remove({ _id: req.params.id }, (err) => {
 			if (err) {
 				res.json({
@@ -397,5 +391,4 @@ module.exports = function (app) {
 			}
 		})
 	})
-
 }

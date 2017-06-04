@@ -1,0 +1,25 @@
+{
+    "path": "",
+    "renderPage": "user",
+    "children": [
+        "notes",
+        "note/:id",
+        "recommends",
+        "other",
+        {
+            "path": "admin",
+            "renderPage": "admin",
+            "children": [
+                {
+                    "path": "login",
+                    "renderPage": "login"
+                },
+                "article",
+                "category",
+                "recommend",
+                "demo",
+                "article/new"
+            ]
+        }
+    ]
+}
