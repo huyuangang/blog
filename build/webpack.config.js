@@ -5,10 +5,10 @@ var path = require('path');
 module.exports = {
     devtool:"#eval-source-map",
     entry: {
-        'outputs/index': path.resolve(__dirname,'../entrys/user/index.js'),
-        'outputs/common': path.resolve(__dirname,'../entrys/common.js'),
-        'outputs/login': path.resolve(__dirname,'../entrys/admin/login.js'),
-        'outputs/adminIndex': path.resolve(__dirname,'../entrys/admin/index.js')
+        'outputs/index': path.resolve(__dirname,'../app/entrys/user/index.js'),
+        'outputs/common': path.resolve(__dirname,'../app/entrys/common.js'),
+        'outputs/login': path.resolve(__dirname,'../app/entrys/admin/login.js'),
+        'outputs/adminIndex': path.resolve(__dirname,'../app/entrys/admin/index.js')
     },
     output: {
         path: path.resolve(__dirname, '../app/public'),
