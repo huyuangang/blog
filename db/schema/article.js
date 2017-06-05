@@ -1,5 +1,7 @@
 // 文章
 var mongoose = require('mongoose');
+var Log = require('../model/logs.js');
+var Cate = require('../model/category.js');
 
 var articleSchema = new mongoose.Schema({
 	title: String,         //标题
@@ -25,5 +27,14 @@ var articleSchema = new mongoose.Schema({
 	}
 })
 
+articleSchema.pre('save', function (next) {
+	let log = new Log({ content: `发布了新文章：${this.title}` });
+	log.save((err) => {
+		if (err) {
+			console.log(err);
+		}
+	})
+	next();
+})
 
 module.exports = articleSchema

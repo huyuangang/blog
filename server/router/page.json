@@ -18,7 +18,8 @@
                 "category",
                 "recommend",
                 "demo",
-                "article/new"
+                "article/new",
+                "logs"
             ]
         }
     ]

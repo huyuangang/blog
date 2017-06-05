@@ -9,4 +9,5 @@ var LogSchema = new mongoose.Schema({
 		default:Date.now
 	}
 })
+
 module.exports = LogSchema;

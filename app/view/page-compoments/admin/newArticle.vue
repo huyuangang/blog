@@ -84,6 +84,14 @@
                 })
 
         },
+        deactivated () {
+            this.title = '';
+            this.description = '';
+            this.newCate = '';
+            this.cates = [];
+            this.content = '';
+            this.categories = [];
+        },
         methods: {
             sumbit () {
                 this.cates.push(this.newCate);

@@ -1,7 +1,8 @@
 //文章类别
-var mongoose = require('mongoose')
+const mongoose = require('mongoose');
+const Article = require('../model/article.js');
 
-var cateSchema = new mongoose.Schema({
+let cateSchema = new mongoose.Schema({
 	name: String,
 	articles: [],
 	createTime: {
@@ -9,5 +10,6 @@ var cateSchema = new mongoose.Schema({
 		default:Date.now
 	}
 })
+
 
 module.exports = cateSchema
