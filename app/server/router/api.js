@@ -36,9 +36,9 @@ module.exports = function (app) {
 	});
 	//获取文章
 	app.get('/api/notes', (req, res) => {
-		if (req.session.user === undefined) {
+		if (req.headers['referer'].indexOf('/admin/article')!== -1 && req.session.user) {
 			Article
-				.find({ status: true })
+				.find({})
 				.sort({'createTime': -1})
 				.exec((err, cb) => {
 					if (err) {
@@ -57,7 +57,7 @@ module.exports = function (app) {
 		}
 		else {
 			Article
-				.find({})
+				.find({ status: true })
 				.sort({ 'createTime': -1 })
 				.exec((err, cb) => {
 					if (err) {

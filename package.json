@@ -37,7 +37,7 @@
     "less": "2.3.1",
     "less-loader": "2.2.3",
     "marked": "^0.3.6",
-    "mongoose": "^4.7.7",
+    "mongoose": "4.11.0",
     "path": "^0.12.7",
     "style-loader": "0.13.1",
     "vuex": "^2.3.1",

@@ -75,7 +75,6 @@
 
 <style lang="less" scoped>
 .article{
-    margin-top:50px;
     .list-header,.list-item{
         padding-bottom: 20px;
         border-bottom: 1px solid #e7e7e7;

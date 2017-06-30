@@ -27,14 +27,4 @@ var articleSchema = new mongoose.Schema({
 	}
 })
 
-articleSchema.pre('save', function (next) {
-	let log = new Log({ content: `发布了新文章：${this.title}` });
-	log.save((err) => {
-		if (err) {
-			console.log(err);
-		}
-	})
-	next();
-})
-
 module.exports = articleSchema

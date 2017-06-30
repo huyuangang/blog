@@ -1,6 +1,6 @@
 <template>
     <div class='logs'>
-        <span class='add-btn' @click='showModal=true;'>添加</span>
+        <span class='add-btn' @click='showModal=true;'>添加日志</span>
         <div class="list-header">
             <span class='no'>#</span>
             <span class='title'>日志</span>
