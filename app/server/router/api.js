@@ -36,19 +36,57 @@ module.exports = function (app) {
 	});
 	//获取文章
 	app.get('/api/notes', (req, res) => {
+<<<<<<< HEAD
 		if (req.headers['referer'].indexOf('/admin/article') !== -1 && req.session.user) {
 			Article.findAll().then(val => {
 				res.json({
 					success: true,
 					data: val
+=======
+		if (req.headers['referer'].indexOf('/admin/article')!== -1 && req.session.user) {
+			Article
+				.find({})
+				.sort({'createTime': -1})
+				.exec((err, cb) => {
+					if (err) {
+						res.json({
+							error: true,
+							data: err
+						})
+					}
+					else {
+						res.json({
+							success: true,
+							data: cb
+						})
+					}
+>>>>>>> b7292070c6d187c00619ebeb60e83c9e21d85418
 				})
 			})
 		}
 		else {
+<<<<<<< HEAD
 			Article.findAll(true).then(val => {
 				res.json({
 					success: true,
 					data: val
+=======
+			Article
+				.find({ status: true })
+				.sort({ 'createTime': -1 })
+				.exec((err, cb) => {
+					if (err) {
+						res.json({
+							error: true,
+							data: err
+						})
+					} else {
+						res.json({
+							success: true,
+							data: cb
+						})
+					}
+>>>>>>> b7292070c6d187c00619ebeb60e83c9e21d85418
 				})
 			})
 		}
