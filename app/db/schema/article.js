@@ -27,14 +27,18 @@ var articleSchema = new mongoose.Schema({
 	}
 })
 
-articleSchema.pre('save', function (next) {
-	let log = new Log({ content: `发布了新文章：${this.title}` });
-	log.save((err) => {
-		if (err) {
-			console.log(err);
-		}
-	})
-	next();
-})
-
 module.exports = articleSchema
+
+
+articleSchema.static('findAll', function(status = false) {
+	if (status) {
+		return this
+				.find({ status: true })
+				.sort({ 'createTime': -1 });
+	}
+	else {
+		return this
+				.find({})
+				.sort({ 'createTime': -1 });
+	}
+})

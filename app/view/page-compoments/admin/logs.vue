@@ -1,6 +1,6 @@
 <template>
     <div class='logs'>
-        <span class='add-btn' @click='showModal=true;'>添加</span>
+        <span class='add-btn' @click='showModal=true;'>添加日志</span>
         <div class="list-header">
             <span class='no'>#</span>
             <span class='title'>日志</span>
@@ -83,9 +83,9 @@
         display:inline-block;
         margin-bottom: 20px;
         margin-left: 20px;
-        height: 40px;
+        height: 50px;
         text-align:center;
-        line-height: 40px;
+        line-height: 50px;
         border: 1px solid;
         padding: 0  20px;
         cursor: pointer;

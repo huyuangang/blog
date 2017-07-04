@@ -142,7 +142,7 @@
         text-align:center;
         line-height: 50px;
         border: 1px solid;
-        padding: 0  10px;
+        padding: 0 20px;
     }
     .add-form{
         padding: 0 20px;

@@ -1,5 +1,6 @@
 <template>
     <div class='article'>
+        <router-link class='add-article' to='/admin/article/new'>新建文章</router-link>
         <div class="list-header">
             <span class='no'>#</span>
             <span class='title'>标题</span>
@@ -74,8 +75,18 @@
 
 
 <style lang="less" scoped>
+@import '~@styles/color.less';
 .article{
-    margin-top:50px;
+    .add-article{
+        display:inline-block;
+        margin-bottom: 20px;
+        margin-left: 20px;
+        height: 50px;
+        text-align:center;
+        line-height: 50px;
+        border: 1px solid;
+        padding: 0 20px;
+    }
     .list-header,.list-item{
         padding-bottom: 20px;
         border-bottom: 1px solid #e7e7e7;
@@ -106,6 +117,9 @@
         font-weight: normal;
         padding: 20px 0;
         border-bottom: none;
+        a:hover{
+            color: @main-blue;
+        }
     }
 }
 a{
@@ -113,7 +127,5 @@ a{
     margin: 0 4px;
     color:#434343;
 }
-a:hover{
-    color:#49ac43;
-}
+
 </style>

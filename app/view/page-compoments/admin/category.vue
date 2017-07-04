@@ -1,5 +1,6 @@
 <template>
     <div class='category'>
+        <span class='add-btn' @click='showModal=true;'>添加分类</span>
         <div class="list-header">
             <span class='no'>#</span>
             <span class='title'>名称</span>
@@ -17,19 +18,31 @@
                 <a @click='deleteCategory(c._id)'><i class="icon-bin" title='删除' ></i></a>
             </span>
         </div>
+        <modal title='添加分类' v-show='showModal' @close='showModal=false;cateName=""'>
+            <div class='add-form' slot='body'>
+                <input type="text" placeholder='请输入分类名称' v-model='cateName'>
+            </div>
+            <div class='add-footer' slot='footer'>
+                <span class='cancel' @click='showModal=false;cateName=""'>取消</span>
+                <span class='sumbit' @click='addCate'>确认添加</span>
+            </div>
+        </modal>
     </div>
 </template>
 
 <script>
-    import {getCates, deleteCateById} from '../../../public/js/api.js';
+    import {getCates, deleteCateById, addCate} from '../../../public/js/api.js';
     import formatDate from '@components/format-date.vue';
+    import modal from '@components/modal.vue';
     export default{
         data:function(){
             return {
-                categories:[]
+                categories:[],
+                cateName: '',
+                showModal: false
             }
         },
-        components:{formatDate},
+        components:{formatDate, modal},
         activated:function(){
             this.getCategory();
         },
@@ -52,6 +65,19 @@
                     .catch((e)=>{
                         console.log(e);
                     });
+            },
+            addCate () {
+                addCate({
+                    name: this.cateName
+                })
+                .then((res)=>{
+                    if(res.data.success){
+                        this.showModal = false;
+                        this.getCategory();
+                    }
+                }).catch((e) => {
+                    console.log(e);
+                })
             }
         }
     }
@@ -60,7 +86,17 @@
 
 <style lang="less" scoped>
     .category{
-        margin-top:80px;
+        .add-btn{
+            display:inline-block;
+            margin-bottom: 20px;
+            margin-left: 20px;
+            height: 50px;
+            text-align:center;
+            line-height: 50px;
+            border: 1px solid;
+            padding: 0  20px;
+            cursor: pointer;
+        }
         .list-header,.list-item{
             padding-bottom: 20px;
             border-bottom: 1px solid #e7e7e7;
@@ -98,6 +134,45 @@
         };
         i:hover{
             color:#49ac43;
+        }
+        .add-form{
+            padding: 0 20px;
+            input{
+                display: block;
+                margin: 20px 0;
+                width: 100%;
+                padding: 10px 0;
+            }
+        }
+        .add-footer{
+            overflow:auto;
+            span{
+                float: right;
+                width: 80px;
+                text-align: center;
+                box-sizing: border-box;
+                margin-bottom: 10px;
+                cursor: pointer;
+                padding: 8px 0;
+            }
+            .sumbit{
+                background: #20a0ff;
+                border: 1px solid #20a0ff;
+                color: #fff;
+                margin-right: 15px;
+                &:hover{
+                    background-color: #4db3ff;
+                }
+            }
+            .cancel{
+                border: 1px solid #bfcbd9;
+                color:#1f2d3d;
+                margin-right: 30px;
+                &:hover{
+                    border: 1px solid #20a0ff;
+                    color:#20a0ff; 
+                }
+            }
         }
     }
 </style>

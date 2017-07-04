@@ -94,7 +94,8 @@
         },
         methods: {
             sumbit () {
-                this.cates.push(this.newCate);
+                if(this.newCate)
+                    this.cates.push(this.newCate);
                 publishNote({
                     title:this.title,
                     description:this.description,

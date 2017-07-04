@@ -12,4 +12,8 @@ let cateSchema = new mongoose.Schema({
 })
 
 
+
 module.exports = cateSchema
+
+
+

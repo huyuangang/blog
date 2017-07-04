@@ -34,7 +34,7 @@ export function addCate (cate) {
     return axios.post('/api/category/new', cate);
 }
 //删除分类
-export function deleteCateById (id) {
+export function deleteCateById (id, name) {
     return axios.delete(`/api/category/${id}`);
 }
 //获取推荐信息

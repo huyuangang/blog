@@ -22,35 +22,11 @@ const router = new VueRouter({
 					}
 				},
 				{
-					path: 'notes',
-					component:resolve => {
-						require.ensure([], () => {
-							resolve(require('@page-components/user/notes.vue'));
-						}, 'notes');
-					}
-				},
-				{
 					path: '/note/:id',
 					component: resolve => {
 						require.ensure([], () => {
 							resolve(require('@page-components/user/note.vue'));
 						}, 'note');
-					}
-				},
-				{
-					path: '/recommends',
-					component: resolve => {
-						require.ensure([], () => {
-							resolve(require('@page-components/user/recommend.vue'));
-						}, 'recommends');
-					}
-				},
-				{
-					path: '/other',
-					component: resolve => {
-						require.ensure([], () => {
-							resolve(require('@page-components/user/other.vue'));
-						}, 'other');
 					}
 				}
 			]
@@ -58,7 +34,6 @@ const router = new VueRouter({
 		
 	]
 })
-
 
 new Vue({
 	el:'#app',

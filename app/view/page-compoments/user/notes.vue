@@ -7,7 +7,7 @@
                             <router-link class='title' :to='"/note/"+a._id'>{{a.title||'无标题'}}</router-link>
                             <p class='desc'>{{a.description||'暂时没有任何描述...'}}</p>
                             <div class="meta">
-                                <span>分类：{{a.category.join(',')}}</span>
+                                <span>分类：{{a.category.join(',') || '无'}}</span>
                                 <span>发表时间：<format-date :date='a.createTime' format='yyyy-MM-dd'></format-date></span>
                                 <span>浏览：{{a.pv}}</span>
                                 <span>评论：{{a.review}}</span>

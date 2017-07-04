@@ -1,2 +1,2 @@
 
-import css3 from '../../styles/admin/login.less';
+import css3 from '@styles/admin/login.less';
