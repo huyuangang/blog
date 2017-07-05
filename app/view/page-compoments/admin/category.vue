@@ -86,7 +86,6 @@
 
 <style lang="less" scoped>
     .category{
-<<<<<<< HEAD
         .add-btn{
             display:inline-block;
             margin-bottom: 20px;
@@ -98,8 +97,6 @@
             padding: 0  20px;
             cursor: pointer;
         }
-=======
->>>>>>> b7292070c6d187c00619ebeb60e83c9e21d85418
         .list-header,.list-item{
             padding-bottom: 20px;
             border-bottom: 1px solid #e7e7e7;

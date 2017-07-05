@@ -100,74 +100,112 @@
 
 <style lang='less' scoped>
     @import '~@styles/color.less';
-    .home{
-        width: 960px;
-        margin: auto;
-        margin-top: 60px;
-        overflow: auto;
-        .main{
-            float: left;
-            width: 700px;
-            background: @white;
-            .article{
-                border-top: 1px solid @main-back;
-                padding: 15px 20px;
-                box-sizing: border-box;
-                .title{
-                    font-size: 20px;
-                    font-weight: bold;
-                    color: @black;
-                    margin: 5px 0 10px;
-                    display: block;
-                    &:hover{
-                        text-decoration: underline;
+    @media screen and(min-width: 640px){
+        .home{
+            width: 960px;
+            margin: auto;
+            margin-top: 60px;
+            &:after{
+                content: "";
+                display: table;
+                clear: both;
+            }
+            .main{
+                float: left;
+                width: 700px;
+                background: @white;
+                .article{
+                    border-top: 1px solid @main-back;
+                    padding: 15px 20px;
+                    box-sizing: border-box;
+                    .title{
+                        font-size: 20px;
+                        font-weight: bold;
+                        color: @black;
+                        margin: 5px 0 10px;
+                        display: block;
+                        &:hover{
+                            text-decoration: underline;
+                        }
+                    }
+                    .desc{
+                        color: @link2;
+                        margin-bottom: 10px;
+                        font-size: 16px;
+                    }
+                    .meta{
+                        font-size: 14px;
+                        span{
+                            display: inline-block;
+                            margin-right: 15px;
+                        }
                     }
                 }
-                .desc{
-                    color: @link2;
-                    margin-bottom: 10px;
-                    font-size: 16px;
-                }
-                .meta{
-                    font-size: 14px;
-                    span{
-                        display: inline-block;
-                        margin-right: 15px;
+            }
+            .aside{
+                float: right;
+                width: 240px;
+                .inner{
+                    background: @white;
+                    margin-bottom: 20px;
+                    padding: 10px;
+                    box-sizing: border-box;
+                    .inner-title{
+                        padding-bottom: 5px;
+                        font-size: 16px;
+                        color: @black;
+                    }
+                    ul{
+                        margin-left: 5px;
+                    }
+                    .inner-list-item{
+                        padding: 5px 0;
+                        font-size: 14px;
+                        a{
+                            &:hover{
+                                color: @main-blue;
+                                text-decoration: underline;
+                            }
+                        }
+                        .badge{
+                            float: right;
+                        }
+                    }
+                    .no-text{
+                        margin-left: 5px;
                     }
                 }
             }
         }
-        .aside{
-            float: right;
-            width: 240px;
-            .inner{
-                background: @white;
-                margin-bottom: 20px;
-                padding: 10px;
-                box-sizing: border-box;
-                .inner-title{
-                    padding-bottom: 5px;
-                    font-size: 16px;
-                    color: @black;
-                }
-                ul{
-                    margin-left: 5px;
-                }
-                .inner-list-item{
-                    padding: 5px 0;
-                    font-size: 14px;
-                    a{
-                        &:hover{
-                            color: @main-blue;
-                            text-decoration: underline;
+    }
+    @media screen and(max-width: 640px){
+        .home{
+            padding: 10px;
+            .aside{
+                display: none;
+            }
+            .main{
+                .article{
+                    padding: 10px;
+                    margin: 10px 0;
+                    background: #fff;
+                    border: 1px solid #eee;
+                    .title{
+                        font-weight: 600;
+                        font-size: 18px;
+                    }
+                    .desc{
+                        color: #aaa;
+                        margin: 5px 0;
+                    }
+                    .meta{
+                        color: #aaa;
+                        font-size: 12px;
+                        span{
+                            display: inline-block;
+                            margin-right: 10px;
                         }
                     }
-                    .badge{
-                        float: right;
-                    }
-                }
-                .no-text{
-                    margin-left: 5px;
                 }
             }
         }

@@ -27,7 +27,6 @@ var articleSchema = new mongoose.Schema({
 	}
 })
 
-<<<<<<< HEAD
 module.exports = articleSchema
 
 
@@ -43,6 +42,5 @@ articleSchema.static('findAll', function(status = false) {
 				.sort({ 'createTime': -1 });
 	}
 })
-=======
 module.exports = articleSchema
->>>>>>> b7292070c6d187c00619ebeb60e83c9e21d85418
+

@@ -42,13 +42,26 @@
 </script>
 
 <style lang="less">
+    @media screen and(min-width: 640px){
+        .detail{
+            width:960px;
+            margin: auto;
+            .header{
+                margin-top:40px;
+            }
+        }
+    }
+    @media screen and(max-width: 640px){
+        .detail{
+            padding: 10px;
+            .header{
+                margin-top:20px;
+            }
+        }
+    }
     .detail{
-        width:960px;
-        margin: auto;
         .header{
-            margin-top:40px;
             margin-bottom:20px;
-            padding-bottom:10px;
             border-bottom:2px solid #aaa;
             h1{
                 font-size:24px;
@@ -99,10 +112,11 @@
                 }
             }
             pre{
-                background-color: #f4f7f8;
+                background-color: #fff;
                 border-top-right-radius: 5px;
                 border-bottom-right-radius: 5px;
                 padding: 15px 20px;
+                overflow: auto;
                 code {
                     font-size: 14px;
                     span{
