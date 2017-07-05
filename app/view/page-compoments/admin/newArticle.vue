@@ -39,25 +39,7 @@
 
 <script>
     import {getCates, publishNote} from '../../../public/js/api.js';
-    let marked = require('marked');
-    let hls = require('highlight.js');
-    hls.configure({
-        tabReplace:'    '
-    })
-    var renderer = new marked.Renderer();
-    marked.setOptions({
-        renderer: renderer,
-        gfm: true,
-        tables: true,
-        breaks: true,
-        pedantic: false,
-        sanitize: true,
-        smartLists: true,
-        smartypants: false,
-        highlight:function(code){
-            return hls.highlightAuto(code).value;
-        }
-    })
+    import marked from '../../../public/js/markdown.js';
     export default{
         data:function(){
             return{

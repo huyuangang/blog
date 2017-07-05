@@ -103,6 +103,9 @@
             hr{
                 margin:30px 0;
             }
+            img{
+                max-width: 100%;
+            }
             blockquote{
                 border-left: 10px solid #aaa;
                 padding: 10px 20px;
