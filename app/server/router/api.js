@@ -38,39 +38,34 @@ module.exports = function (app) {
 	app.get('/api/notes', (req, res) => {
 		if (req.headers['referer'].indexOf('/admin/article') !== -1 && req.session.user) {
 			Article
-				.find({})
-				.sort({ 'createTime': -1 })
-				.exec((err, cb) => {
-					if (err) {
-						res.json({
-							error: true,
-							data: err
-						})
-					}
-					else {
-						res.json({
-							success: true,
-							data: cb
-						})
-					}
+				.findAll()
+				.then(articles => {
+					res.json({
+						success: true,
+						data: articles
+					})
+				})
+				.catch(e => {
+					res.json({
+						success: false,
+						data: e
+					})
 				})
 		}
 		else {
 			Article
-				.find({ status: true })
-				.sort({ 'createTime': -1 })
-				.exec((err, cb) => {
-					if (err) {
-						res.json({
-							error: true,
-							data: err
-						})
-					} else {
-						res.json({
-							success: true,
-							data: cb
-						})
-					}
+				.findAll(true)
+				.then(articles => {
+					res.json({
+						success: true,
+						data: articles
+					})
+				})
+				.catch(e => {
+					res.json({
+						success: false,
+						data: e
+					})
 				})
 		}
 	})
@@ -95,39 +90,71 @@ module.exports = function (app) {
 		let articleEntity = new Article({
 			title: data.title,
 			description: data.description,
-			category: data.category,
+			cates: data.category,
 			html: data.html,
 			text: data.text
 		});
-		articleEntity
-			.save()
-			.then(() => {
-				if (data.newCate !== '') {
-					let cateEntity = new Category({ name: data.newCate });
-					return cateEntity.save();
-				}
-				return Promise.resolve();
-			})
-			.then(() => {
-				let cates = data.category.map(item => Category.findOne({ name: item }));
-				return Promise.all(cates);
-			})
-			.then((cates) => {
-				let catesAddArticle = cates.map(item => {
-					item.articles.push(articleEntity._id);
-					return item.save();
+		if (data.newCate) {
+			let cateEntity = new Category({
+				name: data.newCate,
+			});
+			cateEntity
+				.save()
+				.then(() => {
+					articleEntity.cates.push(cateEntity._id);
+					return articleEntity.save();
 				})
-				return Promise.all(catesAddArticle);
-			})
-			.then(() => {
-				res.json({
-					success: true,
-					data: '文章存储成功'
+				.then(article => {
+					let cates = article.cates.map(item => Category.findOne({ _id: item }));
+					return Promise.all(cates);
 				})
-			})
-			.catch(e => {
-				console.log(e);
-			})
+				.then(cates => {
+					let catesAddArticle = cates.map(item => {
+						item.articles.push(articleEntity._id);
+						return item.save();
+					})
+					return Promise.all(catesAddArticle);
+				})
+				.then(() => {
+					res.json({
+						success: true,
+						data: '文章存储成功'
+					})
+				})
+				.catch(e => {
+					res.json({
+						success: false,
+						data: e
+					})
+				})
+		}
+		else {
+			articleEntity
+				.save()
+				.then(() => {
+					let cates = data.category.map(item => Category.findOne({ _id: item }));
+					return Promise.all(cates);
+				})
+				.then((cates) => {
+					let catesAddArticle = cates.map(item => {
+						item.articles.push(articleEntity._id);
+						return item.save();
+					})
+					return Promise.all(catesAddArticle);
+				})
+				.then(() => {
+					res.json({
+						success: true,
+						data: '文章存储成功'
+					})
+				})
+				.catch(e => {
+					res.json({
+						success: false,
+						data: e
+					})
+				})
+		}
 	});
 	//修改文章状态
 	app.put('/api/note/status/:id', (req, res) => {
@@ -156,7 +183,7 @@ module.exports = function (app) {
 		Article
 			.findByIdAndRemove(articleId)
 			.then(article => {
-				let cates = article.category.map(item => Category.findOne({ name: item }));
+				let cates = article.cates.map(item => Category.findOne({ _id: item }));
 				return Promise.all(cates);
 			})
 			.then(cates => {
@@ -221,21 +248,20 @@ module.exports = function (app) {
 	//删除分类
 	app.delete('/api/category/:id', (req, res) => {
 		let delCateId = req.params.id;
-		let delCateName;
 		Category
 			.findByIdAndRemove(delCateId)
 			.then(delCate => {
-				delCateName = delCate.name;
 				let articlesOfDelCate = delCate.articles.map(item => Article.findById(item));
 				return Promise.all(articlesOfDelCate);
 			})
 			.then(articles => {
 				let articleDelCate = articles.map(item => {
-					let index = item.category.indexOf(delCateName);
+					let index = item.category.indexOf(delCateId);
 					if (index > -1)
 						item.category.splice(index, 1);
 					return item.save();
 				})
+				return Promise.all(articleDelCate);
 			})
 			.then(() => {
 				res.json({
