@@ -5,7 +5,7 @@
                 <router-link class='title' :to='"/note/"+n._id'>{{n.title||'无标题'}}</router-link>
                 <p class='desc'>{{n.description||'暂时没有任何描述...'}}</p>
                 <div class="meta">
-                    <span><i class='fa fa-tag'>&nbsp;&nbsp;</i>{{n.category.join(',')}}</span>
+                    <span><i class='fa fa-tag'>&nbsp;&nbsp;</i>{{n.cates.join(',')}}</span>
                     <span><i class='fa fa-clock-o'>&nbsp;</i><format-date :date='n.createTime' format='yyyy-MM-dd'></format-date></span>
                     <span><i class='fa fa-eye'>&nbsp;&nbsp;</i>{{n.pv}}</span>
                     <span><i class='fa fa-commenting'>&nbsp;&nbsp;</i>{{n.review}}</span>
@@ -65,7 +65,10 @@
             getNotes()
                 .then((res)=>{
                     if(res.data.success)
-                        this.notes = res.data.data;
+                        this.notes = res.data.data.map(d => {
+                            d.cates = d.cates.map(c => c.name);
+                            return d;
+                        });
                         let nowDate = new Date();
                         this.recent = this.notes.filter((item)=>{
                             let date = new Date(item.createTime)

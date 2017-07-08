@@ -14,7 +14,7 @@
                 <input type="text" v-model='newCate'>
                 <div class="type">
                     <div v-for='c in categories'>
-                        <input type='checkbox' name='type' :value='c.name' v-model='cates'>
+                        <input type='checkbox' name='type' :value='c._id' v-model='cates'>
                         <span>{{c.name}}</span> 
                     </div>
                         
@@ -76,8 +76,6 @@
         },
         methods: {
             sumbit () {
-                if(this.newCate)
-                    this.cates.push(this.newCate);
                 publishNote({
                     title:this.title,
                     description:this.description,
