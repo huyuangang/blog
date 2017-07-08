@@ -4,7 +4,12 @@ const Article = require('../model/article.js');
 
 let cateSchema = new mongoose.Schema({
 	name: String,
-	articles: [],
+	articles: [
+		{
+			type: mongoose.Schema.Types.ObjectId,
+			ref: 'articles'
+		}
+	],
 	createTime: {
 		type:Date,
 		default:Date.now

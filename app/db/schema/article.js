@@ -1,45 +1,48 @@
 // 文章
 var mongoose = require('mongoose');
-var Log = require('../model/logs.js');
 var Cate = require('../model/category.js');
 
 var articleSchema = new mongoose.Schema({
 	title: String,         //标题
 	description: String,   //描述
-	category: [],          //类别
-	text:'',
-	html:'',
+	cates: [
+		{
+			type: mongoose.Schema.Types.ObjectId,
+			ref: "cates"
+		}
+	],          //类别
+	text: '',
+	html: '',
 	createTime: {          //创建时间
-		type:Date,
-		default:Date.now
-	},      
-	status:{               //是否显示
-		type:Boolean,
-		default:true
-	},        
+		type: Date,
+		default: Date.now
+	},
+	status: {               //是否显示
+		type: Boolean,
+		default: true
+	},
 	pv: {                  //浏览量
-		type:Number,
+		type: Number,
 		default: 0
 	},
-	review:{               //评论量
-		type:Number,
+	review: {               //评论量
+		type: Number,
 		default: 0
 	}
 })
 
-module.exports = articleSchema
-
-
-articleSchema.static('findAll', function(status = false) {
+articleSchema.static('findAll', function (status = false) {
 	if (status) {
 		return this
-				.find({ status: true })
-				.sort({ 'createTime': -1 });
+			.find({ status: true })
+			.populate('cates', 'name')
+			.sort({ 'createTime': -1 });
 	}
 	else {
 		return this
-				.find({})
-				.sort({ 'createTime': -1 });
+			.find({})
+			.populate('cates', ['name'])
+			.sort({ 'createTime': -1 });
 	}
 })
 module.exports = articleSchema
