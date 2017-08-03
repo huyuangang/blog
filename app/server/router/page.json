@@ -2,6 +2,7 @@
     "path": "",
     "renderPage": "user",
     "children": [
+        "test",
         "notes",
         "note/:id",
         "recommends",

@@ -28,6 +28,14 @@ const router = new VueRouter({
 							resolve(require('@page-components/user/note.vue'));
 						}, 'note');
 					}
+				},
+				{
+					path: '/test',
+					component: resolve => {
+						require.ensure([], () => {
+							resolve(require('@page-components/user/test.vue'));
+						}, 'test');
+					}
 				}
 			]
 		}

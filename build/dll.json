@@ -461,7 +461,7 @@
       "id": 114,
       "meta": {}
     },
-    "../node_modules/_vue-router@2.6.0@vue-router/dist/vue-router.esm.js": {
+    "../node_modules/_vue-router@2.7.0@vue-router/dist/vue-router.esm.js": {
       "id": 115,
       "meta": {
         "harmonyModule": true
